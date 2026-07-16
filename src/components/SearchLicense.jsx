@@ -158,11 +158,11 @@ const SearchLicense = () => {
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="p-4 sm:p-6 border-t border-primary-light">
                 <div className="bg-white rounded-xl border border-primary-light shadow-sm card-hover p-4 sm:p-5">
                   <div className="flex items-center gap-3 mb-4 pb-4 border-b border-primary-light flex-wrap">
-                    <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center shrink-0">
-                      <span className="text-accent font-bold">LIO</span>
+                    <div className="w-9 h-9 shrink-0 flex items-center justify-center">
+                      <img src={iaaLogo} alt="IAA" className="h-8 w-auto" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-primary text-sm truncate">LICENSE INTERNATIONAL OFFICIAL</p>
+                      <p className="font-bold text-primary text-sm truncate">IAA - License International Official</p>
                       <p className="text-[9px] text-text-muted uppercase tracking-wider">{t.search.issuedBy}</p>
                     </div>
                     <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0">{t.search.valid}</span>
