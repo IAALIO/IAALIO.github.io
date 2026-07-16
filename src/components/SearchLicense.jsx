@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../App'
 import { jsPDF, GState } from 'jspdf'
 import iaaLogo from '../assets/images/iaa-logo.png'
+import unLogo from '../assets/images/un-logo.svg'
+import fiaLogo from '../assets/images/fia-logo.svg'
 
 function parseCSVLine(line) {
   const result = []
@@ -77,9 +79,13 @@ const SearchLicense = () => {
       const pw = doc.internal.pageSize.getWidth()
       const ph = doc.internal.pageSize.getHeight()
 
-      const iaaImg = await new Promise(resolve => {
-        const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = iaaLogo
+      const loadImg = (src) => new Promise(resolve => {
+        const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = src
       })
+
+      const [iaaImg, unImg, fiaImg] = await Promise.all([
+        loadImg(iaaLogo), loadImg(unLogo), loadImg(fiaLogo),
+      ])
 
       try {
         if (iaaImg) {
@@ -194,6 +200,23 @@ const SearchLicense = () => {
       y += 4
       doc.setDrawColor(200); doc.setLineWidth(0.3)
       doc.line(20, y, pw - 20, y); y += 7
+
+      const logos = [
+        { img: iaaImg, label: 'IAA' },
+        { img: unImg, label: 'UN' },
+        { img: fiaImg, label: 'FIA' },
+      ]
+      const logoW = 18; const logoGap = 8; const totalW = logos.length * logoW + (logos.length - 1) * logoGap
+      let lx = (pw - totalW) / 2
+      logos.forEach(({ img, label }) => {
+        if (img) {
+          const lh = (img.height / img.width) * logoW
+          try { doc.addImage(img, 'PNG', lx, y, logoW, lh) } catch {}
+        }
+        lx += logoW + logoGap
+      })
+      y += 12
+
       doc.setFont('helvetica', 'italic'); doc.setFontSize(7)
       doc.text(es
         ? 'Documento oficial emitido por IAA - License International Official.'
