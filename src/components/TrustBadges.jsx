@@ -40,7 +40,7 @@ const TrustBadges = () => {
             <h3 className="font-bold text-primary text-sm mb-2">{t.trust.paymentTitle}</h3>
             <p className="text-xs text-text-muted leading-relaxed mb-3">{t.trust.paymentDesc}</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {['Zelle', 'PayPal', 'Binance', 'Western Union', 'Avancemos'].map((m, i) => (
+              {['Binance', 'PayPal', 'Zelle', 'Bancos Internacionales', 'Bancos Locales'].map((m, i) => (
                 <span key={i} className="bg-accent-subtle text-accent font-semibold px-2.5 py-1 rounded text-[10px] tracking-wide">{m}</span>
               ))}
             </div>
