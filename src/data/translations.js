@@ -69,6 +69,8 @@ export const translations = {
       height: 'Estatura', bloodType: 'Tipo Sangre', dob: 'F. Nacimiento', nationality: 'Nacionalidad',
       eyeColor: 'Color Ojos',
       linkLabel: 'Documento Relacionado',
+      viewPhoto: 'Ver Foto Original',
+      photoLabel: 'Foto del Titular',
       footer: 'Documento oficial verificado electrónicamente por LIO'
     },
     admin: {
@@ -183,6 +185,8 @@ export const translations = {
       height: 'Height', bloodType: 'Blood Type', dob: 'D.O.B.', nationality: 'Nationality',
       eyeColor: 'Eye Color',
       linkLabel: 'Related Document',
+      viewPhoto: 'View Original Photo',
+      photoLabel: 'Holder Photo',
       footer: 'Electronically verified official document issued by LIO'
     },
     admin: {
