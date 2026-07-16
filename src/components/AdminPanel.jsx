@@ -28,7 +28,7 @@ const AdminPanel = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selected, setSelected] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
-  const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '' })
+  const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '' })
   const [addSuccess, setAddSuccess] = useState(false)
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const AdminPanel = () => {
           link: r[6] || '', fechaNacimiento: r[7] || '',
           nacionalidad: r[8] || '', estatura: r[9] || '',
           tipoSangre: r[10] || '', colorOjos: r[11] || '',
-          fotoUrl: r[12] || '',
+          fotoUrl: r[12] || '', paisValido: r[13] || '',
         }
       })
       setLicenses(data)
@@ -76,9 +76,9 @@ const AdminPanel = () => {
   }
 
   const exportCSV = () => {
-    const header = 'Documento,ID Tramite,Nombre,Vencimiento,Estado,Categoria,LINK,Fecha Nac,Nacionalidad,Estatura,Sangre,Ojos,Foto URL'
+    const header = 'Documento,ID Tramite,Nombre,Vencimiento,Estado,Categoria,LINK,Fecha Nac,Nacionalidad,Estatura,Sangre,Ojos,Foto URL,Pais Valido'
     const rows = licenses.map(l =>
-      `${l.id},${l.id_tramite},"${l.nombre}",${l.validoHasta},${l.estado},${l.tipo},${l.link},${l.fechaNacimiento},${l.nacionalidad},${l.estatura},${l.tipoSangre},${l.colorOjos},${l.fotoUrl}`
+      `${l.id},${l.id_tramite},"${l.nombre}",${l.validoHasta},${l.estado},${l.tipo},${l.link},${l.fechaNacimiento},${l.nacionalidad},${l.estatura},${l.tipoSangre},${l.colorOjos},${l.fotoUrl},${l.paisValido}`
     ).join('\n')
     const blob = new Blob([header + '\n' + rows], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -94,7 +94,7 @@ const AdminPanel = () => {
   const handleAddSubmit = (e) => {
     e.preventDefault()
     if (!addForm.docId || !addForm.nombre) { alert(lang === 'es' ? 'Completa Documento y Nombre' : 'Complete Document and Name'); return }
-    const csvLine = `${addForm.docId},${addForm.tramite},"${addForm.nombre}",${addForm.vencimiento},ACTIVA,${addForm.categoria},${addForm.link},${addForm.nacimiento},${addForm.nacionalidad},${addForm.estatura},${addForm.sangre},${addForm.ojos},${addForm.foto}`
+    const csvLine = `${addForm.docId},${addForm.tramite},"${addForm.nombre}",${addForm.vencimiento},ACTIVA,${addForm.categoria},${addForm.link},${addForm.nacimiento},${addForm.nacionalidad},${addForm.estatura},${addForm.sangre},${addForm.ojos},${addForm.foto},${addForm.pais}`
     navigator.clipboard.writeText(csvLine)
     setAddSuccess(true)
     setTimeout(() => setAddSuccess(false), 3000)
@@ -178,7 +178,7 @@ const AdminPanel = () => {
           <div className="p-5 border-b border-primary-light flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <h3 className="font-bold text-primary text-sm">{lang === 'es' ? 'Registro de Licencias' : 'License Registry'}</h3>
-              <button onClick={() => { setAddForm({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '' }); setShowAddForm(!showAddForm) }} className="flex items-center gap-1 text-accent text-xs font-semibold hover:underline">
+              <button onClick={() => { setAddForm({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '' }); setShowAddForm(!showAddForm) }} className="flex items-center gap-1 text-accent text-xs font-semibold hover:underline">
                 <Plus size={14} /> {lang === 'es' ? 'Nuevo' : 'New'}
               </button>
             </div>
@@ -208,6 +208,7 @@ const AdminPanel = () => {
                 <input type="text" name="sangre" value={addForm.sangre} onChange={handleAddChange} placeholder={lang === 'es' ? 'Tipo Sangre' : 'Blood Type'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <input type="text" name="ojos" value={addForm.ojos} onChange={handleAddChange} placeholder={lang === 'es' ? 'Color Ojos' : 'Eye Color'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <input type="text" name="foto" value={addForm.foto} onChange={handleAddChange} placeholder={lang === 'es' ? 'URL Foto' : 'Photo URL'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
+                <input type="text" name="pais" value={addForm.pais} onChange={handleAddChange} placeholder={lang === 'es' ? 'País Válido' : 'Valid Country'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <div className="md:col-span-3 flex gap-2">
                   <button type="submit" className="flex items-center gap-1.5 bg-accent text-white font-semibold px-4 py-2 rounded-lg hover:bg-accent-dark transition-all text-sm">
                     {addSuccess ? <><Check size={16} /> {lang === 'es' ? 'Copiado' : 'Copied'}</> : lang === 'es' ? 'Generar línea CSV' : 'Generate CSV line'}
@@ -290,6 +291,7 @@ const AdminPanel = () => {
                 { label: t.search.height, value: selected.estatura },
                 { label: t.search.bloodType, value: selected.tipoSangre },
                 { label: t.search.eyeColor, value: selected.colorOjos },
+                { label: t.search.validCountry, value: selected.paisValido },
               ].map((f, i) => f.value ? (
                 <div key={i}>
                   <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">{f.label}</span>

@@ -41,12 +41,11 @@ const SearchLicense = () => {
   const [docId, setDocId] = useState('')
   const [status, setStatus] = useState('idle')
   const [result, setResult] = useState(null)
-  const [imgError, setImgError] = useState(false)
 
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!docId) return
-    setStatus('loading'); setImgError(false)
+    setStatus('loading')
     try {
       const CSV_URL = import.meta.env.VITE_CSV_URL || 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQcLOEKNE8N8-dRiH9ZhFxxbpK59mSE8gc-Of1wya6QH6HuOQvs1l6pFnxM35HoUhUsOCI12p03n5YY/pub?output=csv'
       const res = await fetch(CSV_URL)
@@ -68,6 +67,7 @@ const SearchLicense = () => {
           fotoUrl: getDirectImageUrl(raw),
           fotoOriginal: getGDriveFileUrl(raw),
           fotoRaw: raw,
+          paisValido: row[13] || '',
         })
         setStatus('found')
       } else {
@@ -164,19 +164,10 @@ const SearchLicense = () => {
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-5">
-                    {result.fotoUrl && !imgError && (
+                    {result.fotoUrl && (
                       <div className="shrink-0">
                         <div className="w-24 h-24 rounded-xl border-2 border-primary-light overflow-hidden bg-white shadow-sm">
-                          <img src={result.fotoUrl} alt="Holder" className="w-full h-full object-cover" onError={() => setImgError(true)} />
-                        </div>
-                      </div>
-                    )}
-                    {(imgError || (!result.fotoUrl && result.fotoRaw)) && (
-                      <div className="shrink-0">
-                        <div className="w-24 h-24 rounded-xl border-2 border-primary-light overflow-hidden bg-bg-section flex items-center justify-center p-2">
-                          <p className="text-text-muted text-[9px] text-center leading-tight">
-                            {lang === 'es' ? 'Foto no disponible' : 'Photo unavailable'}
-                          </p>
+                          <img src={result.fotoUrl} alt="Holder" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.fotoOriginal || result.fotoUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Foto' : 'View Photo'}</a>` }} />
                         </div>
                       </div>
                     )}
@@ -238,10 +229,10 @@ const SearchLicense = () => {
                   {result.link && (
                     <div className="mt-4 pt-3 border-t border-primary-light">
                       <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.linkLabel}</span>
-                      <div className="flex items-center gap-2 mt-0.5">
+                      <div className="mt-1">
                         {isUrl(result.link) ? (
-                          <a href={result.link} target="_blank" rel="noopener noreferrer" className="text-accent font-semibold text-sm hover:underline flex items-center gap-1 break-all">
-                            {result.link} <ExternalLink size={12} />
+                          <a href={result.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-accent font-semibold text-sm hover:underline">
+                            <ExternalLink size={14} /> {lang === 'es' ? 'Abrir Documento' : 'Open Document'}
                           </a>
                         ) : (
                           <span className="text-primary font-semibold text-sm">{result.link}</span>
@@ -250,12 +241,10 @@ const SearchLicense = () => {
                     </div>
                   )}
 
-                  {result.fotoRaw && !result.fotoUrl && (
+                  {result.paisValido && (
                     <div className="mt-3 pt-3 border-t border-primary-light">
-                      <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{lang === 'es' ? 'Foto (sin URL)' : 'Photo (no URL)'}</span>
-                      <p className="text-text-muted text-xs italic mt-0.5">
-                        {lang === 'es' ? `"${result.fotoRaw}" — no es una URL válida. Agregá un enlace a una imagen en tu Sheet.` : `"${result.fotoRaw}" — not a valid URL. Add an image link in your Sheet.`}
-                      </p>
+                      <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.validCountry}</span>
+                      <p className="font-semibold text-primary text-sm mt-0.5">{result.paisValido}</p>
                     </div>
                   )}
 
