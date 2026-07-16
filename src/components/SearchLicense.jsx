@@ -76,28 +76,19 @@ const SearchLicense = () => {
     const pw = doc.internal.pageSize.getWidth()
     const ph = doc.internal.pageSize.getHeight()
 
-    const loadImageDataUrl = async (url) => {
-      if (!url) return null
-      try {
-        const blob = await fetch(url).then(r => r.blob())
-        return await new Promise(resolve => {
-          const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
-        })
-      } catch { return null }
-    }
+    const loadImage = (src) => new Promise(resolve => {
+      const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = src
+    })
 
-    const [iaaDataUrl, fotoDataUrl] = await Promise.all([
-      loadImageDataUrl(iaaLogo),
-      loadImageDataUrl(result.fotoUrl),
+    const [iaaImg, fotoImg] = await Promise.all([
+      loadImage(iaaLogo),
+      result.fotoUrl ? loadImage(result.fotoUrl) : null,
     ])
 
-    if (iaaDataUrl) {
-      const img = await new Promise(resolve => {
-        const i = new Image(); i.onload = () => resolve(i); i.src = iaaDataUrl
-      })
-      const wmW = 100; const wmH = (img.height / img.width) * wmW
+    if (iaaImg) {
+      const wmW = 100; const wmH = (iaaImg.height / iaaImg.width) * wmW
       doc.setGState(new GState({ opacity: 0.2 }))
-      doc.addImage(iaaDataUrl, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
+      doc.addImage(iaaImg, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
       doc.setGState(new GState({ opacity: 1 }))
     }
 
@@ -133,16 +124,11 @@ const SearchLicense = () => {
       doc.text(': ' + value, 85, y); y += 9
     })
 
-    if (fotoDataUrl) {
-      try {
-        const foto = await new Promise(resolve => {
-          const i = new Image(); i.onload = () => resolve(i); i.src = fotoDataUrl
-        })
-        const fotoW = 55; const fotoH = (foto.height / foto.width) * fotoW
-        doc.addImage(fotoDataUrl, 'PNG', 150, 55, fotoW, Math.min(fotoH, 70))
-        doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
-        doc.rect(150, 55, fotoW, Math.min(fotoH, 70))
-      } catch {}
+    if (fotoImg) {
+      const fotoW = 55; const fotoH = Math.min((fotoImg.height / fotoImg.width) * fotoW, 70)
+      doc.addImage(fotoImg, 'JPEG', 150, 55, fotoW, fotoH)
+      doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
+      doc.rect(150, 55, fotoW, fotoH)
     }
 
     doc.setDrawColor(200); doc.setLineWidth(0.3)
