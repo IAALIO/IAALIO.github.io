@@ -72,75 +72,87 @@ const SearchLicense = () => {
 
   const generatePDF = async () => {
     if (!result) return
-    const doc = new jsPDF('p', 'mm', 'a4')
-    const pw = doc.internal.pageSize.getWidth()
-    const ph = doc.internal.pageSize.getHeight()
+    try {
+      const doc = new jsPDF('p', 'mm', 'a4')
+      const pw = doc.internal.pageSize.getWidth()
+      const ph = doc.internal.pageSize.getHeight()
 
-    const loadImage = (src) => new Promise(resolve => {
-      const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = src
-    })
+      const loadImage = (src, cors) => new Promise(resolve => {
+        const i = new Image()
+        if (cors) i.crossOrigin = 'anonymous'
+        i.onload = () => resolve(i)
+        i.onerror = () => resolve(null)
+        i.src = src
+      })
 
-    const [iaaImg, fotoImg] = await Promise.all([
-      loadImage(iaaLogo),
-      result.fotoUrl ? loadImage(result.fotoUrl) : null,
-    ])
+      const [iaaImg, fotoImg] = await Promise.all([
+        loadImage(iaaLogo),
+        result.fotoUrl ? loadImage(result.fotoUrl, true) : null,
+      ])
 
-    if (iaaImg) {
-      const wmW = 100; const wmH = (iaaImg.height / iaaImg.width) * wmW
-      doc.setGState(new GState({ opacity: 0.2 }))
-      doc.addImage(iaaImg, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
-      doc.setGState(new GState({ opacity: 1 }))
-    }
+      try {
+        if (iaaImg) {
+          const wmW = 100; const wmH = (iaaImg.height / iaaImg.width) * wmW
+          doc.setGState(new GState({ opacity: 0.2 }))
+          doc.addImage(iaaImg, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
+          doc.setGState(new GState({ opacity: 1 }))
+        }
+      } catch {}
 
-    const endorseText = lang === 'es' ? 'Avalado por IAA · ONU · FIA' : 'Endorsed by IAA · UN · FIA'
+      const endorseText = lang === 'es' ? 'Avalado por IAA · ONU · FIA' : 'Endorsed by IAA · UN · FIA'
 
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(16); doc.text('INTERNATIONAL DRIVING PERMIT', pw / 2, 20, { align: 'center' })
-    doc.text('PERMISO INTERNACIONAL DE CONDUCIR', pw / 2, 28, { align: 'center' })
-    doc.setFontSize(9); doc.setFont('helvetica', 'normal')
-    doc.text('IAA - License International Official', pw / 2, 36, { align: 'center' })
-    doc.setFontSize(8); doc.setFont('helvetica', 'bold')
-    doc.text(endorseText, pw / 2, 42, { align: 'center' })
-    doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
-    doc.line(20, 47, pw - 20, 47)
-    doc.setFontSize(11); doc.setFont('helvetica', 'bold')
-    const fields = [
-      ['1. Holder / Titular', result.nombre || ''],
-      ['2. Date of Birth / F. Nacimiento', result.fechaNacimiento || ''],
-      ['3. Nationality / Nacionalidad', result.nacionalidad || ''],
-      ['4. Height / Estatura', result.estatura || ''],
-      ['5. Blood Type / Tipo Sangre', result.tipoSangre || ''],
-      ['6. Eye Color / Color Ojos', result.colorOjos || ''],
-      ['7. Document N° / N° Documento', result.id || ''],
-      ['8. Application ID / ID Trámite', result.id_tramite || ''],
-      ['9. Category / Categoría', result.tipo || ''],
-      ['10. Valid Until / Válido Hasta', result.validoHasta || ''],
-      ['11. Status / Estado', result.estado || ''],
-    ]
-    let y = 55
-    fields.forEach(([label, value]) => {
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(10)
-      doc.text(label, 25, y); doc.setFont('helvetica', 'normal')
-      doc.text(': ' + value, 85, y); y += 9
-    })
-
-    if (fotoImg) {
-      const fotoW = 55; const fotoH = Math.min((fotoImg.height / fotoImg.width) * fotoW, 70)
-      doc.addImage(fotoImg, 'JPEG', 150, 55, fotoW, fotoH)
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(16); doc.text('INTERNATIONAL DRIVING PERMIT', pw / 2, 20, { align: 'center' })
+      doc.text('PERMISO INTERNACIONAL DE CONDUCIR', pw / 2, 28, { align: 'center' })
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal')
+      doc.text('IAA - License International Official', pw / 2, 36, { align: 'center' })
+      doc.setFontSize(8); doc.setFont('helvetica', 'bold')
+      doc.text(endorseText, pw / 2, 42, { align: 'center' })
       doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
-      doc.rect(150, 55, fotoW, fotoH)
-    }
+      doc.line(20, 47, pw - 20, 47)
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold')
+      const fields = [
+        ['1. Holder / Titular', result.nombre || ''],
+        ['2. Date of Birth / F. Nacimiento', result.fechaNacimiento || ''],
+        ['3. Nationality / Nacionalidad', result.nacionalidad || ''],
+        ['4. Height / Estatura', result.estatura || ''],
+        ['5. Blood Type / Tipo Sangre', result.tipoSangre || ''],
+        ['6. Eye Color / Color Ojos', result.colorOjos || ''],
+        ['7. Document N° / N° Documento', result.id || ''],
+        ['8. Application ID / ID Trámite', result.id_tramite || ''],
+        ['9. Category / Categoría', result.tipo || ''],
+        ['10. Valid Until / Válido Hasta', result.validoHasta || ''],
+        ['11. Status / Estado', result.estado || ''],
+      ]
+      let y = 55
+      fields.forEach(([label, value]) => {
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10)
+        doc.text(label, 25, y); doc.setFont('helvetica', 'normal')
+        doc.text(': ' + value, 85, y); y += 9
+      })
 
-    doc.setDrawColor(200); doc.setLineWidth(0.3)
-    doc.line(20, y + 5, pw - 20, y + 5); y += 14
-    doc.setFontSize(8); doc.setFont('helvetica', 'italic')
-    doc.text(lang === 'es'
-      ? 'Documento oficial. Debe portarse con su licencia original. Emitido por IAA - License International Official.'
-      : 'Official document. Must be carried with your original license. Issued by IAA - License International Official.',
-      pw / 2, y, { align: 'center', maxWidth: 170 })
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7)
-    doc.text(`IAA - License International Official — ${endorseText}`, pw / 2, 290, { align: 'center' })
-    doc.save(`LIO-License-${result.id || result.id_tramite}.pdf`)
+      try {
+        if (fotoImg) {
+          const fotoW = 55; const fotoH = Math.min((fotoImg.height / fotoImg.width) * fotoW, 70)
+          doc.addImage(fotoImg, 'JPEG', 150, 55, fotoW, fotoH)
+          doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
+          doc.rect(150, 55, fotoW, fotoH)
+        }
+      } catch {}
+
+      doc.setDrawColor(200); doc.setLineWidth(0.3)
+      doc.line(20, y + 5, pw - 20, y + 5); y += 14
+      doc.setFontSize(8); doc.setFont('helvetica', 'italic')
+      doc.text(lang === 'es'
+        ? 'Documento oficial. Debe portarse con su licencia original. Emitido por IAA - License International Official.'
+        : 'Official document. Must be carried with your original license. Issued by IAA - License International Official.',
+        pw / 2, y, { align: 'center', maxWidth: 170 })
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7)
+      doc.text(`IAA - License International Official — ${endorseText}`, pw / 2, 290, { align: 'center' })
+      doc.save(`LIO-License-${result.id || result.id_tramite}.pdf`)
+    } catch (e) {
+      console.error('PDF generation error:', e)
+    }
   }
 
   return (
