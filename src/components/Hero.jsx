@@ -85,7 +85,7 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="hidden lg:block">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden card-hover">
               <div className="p-6">
                 <div className="text-center mb-5">
@@ -115,7 +115,7 @@ const Hero = () => {
                   <p className="text-gray-400 text-[10px] text-center mb-3 uppercase tracking-wider font-semibold">
                     {lang === 'es' ? 'Latinoamérica y más de 160 países' : 'Latin America & 160+ countries'}
                   </p>
-                  <div className="grid grid-cols-6 gap-2">
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                     {flags.map(f => (
                       <div key={f.code} className="flex flex-col items-center gap-0.5">
                         <img src={`https://flagcdn.com/24x18/${f.code}.png`} alt={f.name} className="rounded shadow-sm" loading="lazy" />
