@@ -47,7 +47,7 @@ const UrgencyTopBar = () => {
         </span>
         <span className="w-1 h-1 bg-white/50 rounded-full" />
         <span className="flex items-center gap-1.5">
-          <AwardIcon /> {lang === 'es' ? 'Avalada por la ONU' : 'UN Endorsed'}
+          <AwardIcon /> {lang === 'es' ? 'IAA · ONU · FIA' : 'IAA · UN · FIA'}
         </span>
       </div>
     </motion.div>

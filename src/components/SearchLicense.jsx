@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Search, Loader2, CheckCircle2, XCircle, Download, ExternalLink } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../App'
-import { jsPDF } from 'jspdf'
+import { jsPDF, GState } from 'jspdf'
+import iaaLogo from '../assets/images/iaa-logo.png'
 
 function parseCSVLine(line) {
   const result = []
@@ -69,10 +70,26 @@ const SearchLicense = () => {
     } catch (err) { console.error(err); setStatus('not_found') }
   }
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     if (!result) return
     const doc = new jsPDF('p', 'mm', 'a4')
     const pw = doc.internal.pageSize.getWidth()
+    const ph = doc.internal.pageSize.getHeight()
+
+    const img = new Image()
+    const loadPromise = new Promise(resolve => { img.onload = resolve; img.src = iaaLogo })
+    await loadPromise
+    const canvas = document.createElement('canvas')
+    canvas.width = img.width; canvas.height = img.height
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0)
+    const dataUrl = canvas.toDataURL('image/png')
+    const iw = img.width; const ih = img.height
+    const wmW = 130; const wmH = (ih / iw) * wmW
+    doc.setGState(new GState({ opacity: 0.12 }))
+    doc.addImage(dataUrl, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
+    doc.setGState(new GState({ opacity: 1 }))
+
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(16); doc.text('INTERNATIONAL DRIVING PERMIT', pw / 2, 20, { align: 'center' })
     doc.text('PERMISO INTERNACIONAL DE CONDUCIR', pw / 2, 28, { align: 'center' })

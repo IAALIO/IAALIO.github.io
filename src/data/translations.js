@@ -2,7 +2,7 @@ export const translations = {
   es: {
     nav: { inicio: 'Inicio', precios: 'Precios', requisitos: 'Requisitos', verificar: 'Verificar', tramite: 'Iniciar Trámite', comoFunciona: 'Cómo Funciona', faq: 'FAQ' },
     hero: {
-      badge: 'Avalada por la ONU · Convenio de Ginebra 1949',
+      badge: 'IAA · ONU · FIA',
       title: 'Tu Permiso Internacional',
       titleAccent: 'de Conducir',
       subtitle: 'Obtén tu licencia internacional válida en más de 160 países. Avalada por las instituciones de tránsito más importantes del mundo.',
@@ -11,7 +11,7 @@ export const translations = {
       stats: { paises: 'Países', respuesta: 'Respuesta', legal: 'Legal' },
       urgeText: 'Más de 5,000 licencias emitidas — Entrega rápida y segura',
       trustBadges: ['Binance', 'PayPal', 'Zelle', 'Bancos Internacionales', 'Bancos Locales'],
-      badgeUN: 'AVALADA Y VERIFICADA',
+      badgeUN: 'AVALADO POR IAA · ONU · FIA',
       badgeUNSub: 'Por las instituciones de tránsito más importantes del mundo',
     },
     how: {
@@ -135,7 +135,7 @@ export const translations = {
       securityDesc: 'Cifrado SSL de grado bancario. Tus datos personales viajan protegidos.',
       phoneTitle: 'Soporte Directo',
       phoneDesc: 'Atención personalizada vía WhatsApp y correo electrónico.',
-      badge1: 'Avalada por la ONU',
+      badge1: 'Avalado por IAA · ONU · FIA',
       badge2: 'Convenio de Ginebra 1949',
       badge3: '160+ Países',
       badge4: '9 Idiomas',
@@ -169,7 +169,7 @@ export const translations = {
   en: {
     nav: { inicio: 'Home', precios: 'Pricing', requisitos: 'Requirements', verificar: 'Verify', tramite: 'Apply Now', comoFunciona: 'How It Works', faq: 'FAQ' },
     hero: {
-      badge: 'Endorsed by the UN · Geneva Convention 1949',
+      badge: 'IAA · UN · FIA',
       title: 'Your International',
       titleAccent: 'Driving Permit',
       subtitle: 'Get your international license valid in over 160 countries. Endorsed by the world\'s leading traffic authorities.',
@@ -178,7 +178,7 @@ export const translations = {
       stats: { paises: 'Countries', respuesta: 'Response', legal: 'Legal' },
       urgeText: 'Over 5,000 licenses issued — Fast and secure delivery',
       trustBadges: ['Binance', 'PayPal', 'Zelle', 'Bancos Internacionales', 'Bancos Locales'],
-      badgeUN: 'ENDORSED & VERIFIED',
+      badgeUN: 'ENDORSED BY IAA · UN · FIA',
       badgeUNSub: 'By the world\'s leading traffic authorities',
     },
     how: {
@@ -302,7 +302,7 @@ export const translations = {
       securityDesc: 'Bank-grade SSL encryption. Your personal data is protected in transit.',
       phoneTitle: 'Direct Support',
       phoneDesc: 'Personalized support via WhatsApp and email.',
-      badge1: 'UN Endorsed',
+      badge1: 'Endorsed by IAA · UN · FIA',
       badge2: 'Geneva Convention 1949',
       badge3: '160+ Countries',
       badge4: '9 Languages',
