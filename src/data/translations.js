@@ -67,7 +67,9 @@ export const translations = {
       idTramite: 'ID Trámite', docNum: 'N° Documento',
       issuedBy: 'Emitido por LIO',
       height: 'Estatura', bloodType: 'Tipo Sangre', dob: 'F. Nacimiento', nationality: 'Nacionalidad',
-      linkLabel: 'Documento Relacionado'
+      eyeColor: 'Color Ojos',
+      linkLabel: 'Documento Relacionado',
+      footer: 'Documento oficial verificado electrónicamente por LIO'
     },
     admin: {
       title: 'Acceso Administrativo',
@@ -86,6 +88,8 @@ export const translations = {
       docNumLabel: 'N° Documento', docNumPlaceholder: 'Ej. 12345678',
       nameLabel: 'Nombre', namePlaceholder: 'Ej. Juan Pérez',
       expiryLabel: 'Vencimiento', categoryLabel: 'Categoría',
+      status: 'Estado', totalLicenses: 'Total Licencias',
+      active: 'Activas', expired: 'Vencidas',
       fileLabel: 'Archivo PDF', publish: 'Publicar',
       success: 'Guardado exitoso', error: 'Error al guardar'
     },
@@ -177,7 +181,9 @@ export const translations = {
       idTramite: 'App ID', docNum: 'Document N°',
       issuedBy: 'Issued by LIO',
       height: 'Height', bloodType: 'Blood Type', dob: 'D.O.B.', nationality: 'Nationality',
-      linkLabel: 'Related Document'
+      eyeColor: 'Eye Color',
+      linkLabel: 'Related Document',
+      footer: 'Electronically verified official document issued by LIO'
     },
     admin: {
       title: 'Admin Access',
@@ -196,6 +202,8 @@ export const translations = {
       docNumLabel: 'Document N°', docNumPlaceholder: 'e.g. 12345678',
       nameLabel: 'Name', namePlaceholder: 'e.g. John Doe',
       expiryLabel: 'Expiry', categoryLabel: 'Category',
+      status: 'Status', totalLicenses: 'Total Licenses',
+      active: 'Active', expired: 'Expired',
       fileLabel: 'PDF File', publish: 'Publish',
       success: 'Saved successfully', error: 'Error saving'
     },
