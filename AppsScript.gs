@@ -36,33 +36,35 @@ function doPost(e) {
       data.estatura, data.tipoSangre, data.colorOjos,
       linkCarnet, linkFirma, linkID, linkLicencia])
 
-    MailApp.sendEmail({
-      to: Session.getActiveUser().getEmail(),
-      subject: 'Nueva solicitud LIO - ' + data.nombreCompleto,
-      body: [
-        'Nueva solicitud de permiso internacional:',
-        '',
-        'ID Trámite: ' + idTramite,
-        'Nombre: ' + data.nombreCompleto,
-        'Email: ' + data.email,
-        'Teléfono: ' + data.telefono,
-        'País Nacimiento: ' + data.paisNacimiento,
-        'Fecha Nacimiento: ' + data.fechaNacimiento,
-        'País Residencia: ' + data.paisResidencia,
-        'Vigencia: ' + data.vigencia,
-        'Estatura: ' + data.estatura,
-        'Tipo Sangre: ' + data.tipoSangre,
-        'Color Ojos: ' + data.colorOjos,
-        '',
-        'Fotos:',
-        '- Carnet: ' + (linkCarnet || 'No subida'),
-        '- Firma: ' + (linkFirma || 'No subida'),
-        '- ID: ' + (linkID || 'No subida'),
-        '- Licencia: ' + (linkLicencia || 'No subida'),
-        '',
-        'Sheet: ' + ws.getParent().getUrl(),
-      ].join('\n'),
-    })
+    try {
+      MailApp.sendEmail({
+        to: Session.getActiveUser().getEmail(),
+        subject: 'Nueva solicitud IAA - ' + data.nombreCompleto,
+        body: [
+          'Nueva solicitud de permiso internacional:',
+          '',
+          'ID Trámite: ' + idTramite,
+          'Nombre: ' + data.nombreCompleto,
+          'Email: ' + data.email,
+          'Teléfono: ' + data.telefono,
+          'País Nacimiento: ' + data.paisNacimiento,
+          'Fecha Nacimiento: ' + data.fechaNacimiento,
+          'País Residencia: ' + data.paisResidencia,
+          'Vigencia: ' + data.vigencia,
+          'Estatura: ' + data.estatura,
+          'Tipo Sangre: ' + data.tipoSangre,
+          'Color Ojos: ' + data.colorOjos,
+          '',
+          'Fotos:',
+          '- Carnet: ' + (linkCarnet || 'No subida'),
+          '- Firma: ' + (linkFirma || 'No subida'),
+          '- ID: ' + (linkID || 'No subida'),
+          '- Licencia: ' + (linkLicencia || 'No subida'),
+          '',
+          'Sheet: ' + ws.getParent().getUrl(),
+        ].join('\n'),
+      })
+    } catch(er) {}
 
     return ContentService.createTextOutput(JSON.stringify({ ok: true, id: idTramite }))
       .setMimeType(ContentService.MimeType.JSON)

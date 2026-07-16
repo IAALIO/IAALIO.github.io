@@ -24,7 +24,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          VITE_FORM_API: https://script.google.com/macros/s/AKfycbwCOqCJuDGzvfzlb7iBdLccCDWcMtXB0MNPo2Gekr4n1VAE75iBsY2nvjCylPz2jqCi/exec
+          VITE_FORM_API: https://script.google.com/macros/s/AKfycbx0BP-n-yHe2PGEGjmpQRKdm72VdQ-Yo095qMCnIPP7T5xoSs4AW6ki4XVaHUwcW_-X/exec
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
