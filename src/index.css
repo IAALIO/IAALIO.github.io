@@ -1,18 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Playfair Display', serif;
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-secondary: #1e293b;
-  --color-accent: #64748b;
-  --color-bg-light: #f1f5f9;
-  --color-bg-subtle: #e2e8f0;
-  --color-bg-dark: #0f172a;
+  --color-navy: #0f1b2d;
+  --color-navy-light: #1a2d4a;
+  --color-navy-lighter: #eef2f7;
+  --color-navy-lightest: #f4f7fc;
+  --color-gold: #c8a34e;
+  --color-gold-dark: #a8862f;
+  --color-gold-light: #f5e8c8;
   --color-text-main: #334155;
   --color-text-muted: #64748b;
+  --color-bg-dark: #0f1b2d;
 }
 
 html {
@@ -21,21 +22,27 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg-light);
   color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.glass-dark {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.btn-gold {
+  background: linear-gradient(135deg, #c8a34e 0%, #a8862f 100%);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, #d4b15e 0%, #b89438 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(200, 163, 78, 0.35);
 }

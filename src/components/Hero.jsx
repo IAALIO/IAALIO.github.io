@@ -1,65 +1,91 @@
-import { ShieldCheck, ArrowRight } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Globe2, Clock, Award } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useLang } from '../App'
-import unLogo from '../assets/images/un-logo.svg'
-import fiaLogo from '../assets/images/fia-logo.svg'
 
 const Hero = () => {
   const { t, lang } = useLang()
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50" style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', paddingTop: '80px' }}>
+    <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-light to-navy min-h-screen flex items-center" style={{ paddingTop: '80px' }}>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-200/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -right-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 w-[600px] h-[600px] bg-white/[0.02] rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 bg-blue-50 text-primary rounded-full border border-blue-200 shadow-sm">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
+            <div className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 bg-white/10 backdrop-blur-sm text-gold-light rounded-full border border-gold/20 shadow-sm">
               <ShieldCheck size={18} />
               <span className="font-semibold tracking-wider text-xs uppercase">{t.hero.badge}</span>
             </div>
 
-            <h1 className="font-serif text-secondary mb-6 leading-tight" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
+            <h1 className="text-white mb-6 leading-tight" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>
               {t.hero.title}<br />
-              <span className="text-primary">{t.hero.titleAccent}</span>
+              <span className="text-gold">{t.hero.titleAccent}</span>
             </h1>
 
-            <p className="text-lg text-accent mb-10 leading-relaxed mx-auto" style={{ maxWidth: '650px' }}>
+            <p className="text-base text-gray-300 mb-10 leading-relaxed max-w-lg">
               {t.hero.subtitle}
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-              <a href="#tramite" className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary-hover transition-all hover:-translate-y-1 shadow-lg shadow-primary/30 inline-flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <a href="#tramite" className="btn-gold text-base inline-flex items-center gap-2 px-8 py-4 shadow-xl shadow-gold/20">
                 {t.hero.cta} <ArrowRight size={22} />
               </a>
-              <a href="#verificar" className="border-2 border-primary text-primary px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary hover:text-white transition-all inline-flex items-center gap-2">
+              <a href="#verificar" className="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all inline-flex items-center gap-2 backdrop-blur-sm">
                 {t.hero.verify}
               </a>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h4 className="text-secondary font-bold text-2xl">+150</h4>
-                <p className="text-xs text-accent uppercase tracking-widest font-medium">{t.hero.stats.paises}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h4 className="text-secondary font-bold text-2xl">24h</h4>
-                <p className="text-xs text-accent uppercase tracking-widest font-medium">{t.hero.stats.respuesta}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h4 className="text-secondary font-bold text-2xl">100%</h4>
-                <p className="text-xs text-accent uppercase tracking-widest font-medium">{t.hero.stats.legal}</p>
-              </div>
+            <div className="flex flex-wrap gap-6">
+              {[
+                { icon: Globe2, value: '150+', label: t.hero.stats.paises },
+                { icon: Clock, value: '24h', label: t.hero.stats.respuesta },
+                { icon: Award, value: '100%', label: t.hero.stats.legal },
+              ].map((stat, i) => (
+                <div key={i} className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/10">
+                  <stat.icon size={22} className="text-gold" />
+                  <div>
+                    <span className="text-white font-bold text-xl">{stat.value}</span>
+                    <p className="text-gray-400 text-xs uppercase tracking-wider">{stat.label}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </motion.div>
 
-            <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-60">
-              <span className="text-xs text-accent uppercase tracking-widest font-medium">{lang === 'es' ? 'Reconocido por:' : 'Recognized by:'}</span>
-              <img src={unLogo} alt="United Nations" className="h-10" />
-              <img src={fiaLogo} alt="FIA" className="h-10" />
-              <span className="text-xs text-accent font-medium">Convención de Ginebra 1949</span>
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="hidden lg:block">
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gold/20 rounded-full mb-6">
+                  <ShieldCheck size={40} className="text-gold" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-2">{lang === 'es' ? 'Reconocido Internacionalmente' : 'Internationally Recognized'}</h3>
+                <p className="text-gray-400 text-sm mb-8 max-w-sm mx-auto">
+                  {lang === 'es'
+                    ? 'Nuestros permisos son válidos bajo los tratados internacionales de tránsito vehicular.'
+                    : 'Our permits are valid under international vehicle traffic treaties.'}
+                </p>
+                <div className="space-y-4">
+                  {[
+                    lang === 'es' ? 'Convención de Ginebra 1949' : 'Geneva Convention 1949',
+                    lang === 'es' ? 'Convención de Viena 1968' : 'Vienna Convention 1968',
+                    lang === 'es' ? '150+ Países Adheridos' : '150+ Member Countries',
+                  ].map((text, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3">
+                      <div className="w-2 h-2 bg-gold rounded-full" />
+                      <span className="text-gray-300 text-sm">{text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8 pt-6 border-t border-white/10 flex justify-center gap-6">
+                  <span className="text-gray-500 text-xs uppercase tracking-widest font-medium">{lang === 'es' ? 'Reconocido por:' : 'Recognized by:'}</span>
+                  <span className="text-gray-400 text-sm font-semibold">UN</span>
+                  <span className="text-gray-400 text-sm font-semibold">FIA</span>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
