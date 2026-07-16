@@ -171,7 +171,7 @@ const SearchLicense = () => {
                   <div className="flex flex-col sm:flex-row gap-4">
                     {result.fotoUrl && (
                       <div className="shrink-0 flex justify-center sm:block">
-                        <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-xl border-2 border-primary-light overflow-hidden bg-white shadow-sm">
+                        <div className="w-full sm:w-52 sm:h-52 rounded-xl border-2 border-primary-light overflow-hidden bg-white shadow-sm">
                           <img src={result.fotoUrl} alt="Holder" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.fotoOriginal || result.fotoUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Foto' : 'View Photo'}</a>` }} />
                         </div>
                       </div>
