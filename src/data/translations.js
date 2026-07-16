@@ -25,7 +25,7 @@ export const translations = {
       title: 'Planes y Vigencias',
       subtitle: 'Elige el plan que mejor se adapte a tus necesidades de viaje.',
       recommended: 'MÁS POPULAR',
-      select: 'Comprar',
+      select: 'Aplicar',
       plans: [
         { title: '1 Año', price: '$70', desc: 'Perfecto para viajes cortos.', features: ['Documento Digital + Físico', 'Válido en 160+ países', 'Soporte 24/7', 'Envío courier incluido', 'Traducido a 9 idiomas'] },
         { title: '2 Años', price: '$100', desc: 'La opción favorita de nuestros usuarios.', features: ['Todo lo del plan 1 año', 'Envío prioritario', 'Descuento en renovación', 'Asesoría legal básica', 'Código QR de verificación'] },
