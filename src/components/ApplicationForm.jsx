@@ -40,17 +40,34 @@ const ApplicationForm = () => {
 
   const handleNext = () => { if (validateStep()) nextStep(); else alert(t.form.alertStep) }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e?.preventDefault()
     if (!validateStep()) { alert(t.form.alertEmail); return }
     const btn = document.getElementById('submit-btn')
     if (btn) { btn.disabled = true; btn.innerText = t.form.sending }
-    const fd = new FormData()
-    fd.append('form-name', 'tramite-licencia'); fd.append('bot-field', '')
-    Object.keys(formData).forEach(key => fd.append(key, formData[key]))
-    Object.keys(capturedFiles).forEach(key => { if (capturedFiles[key]) fd.append(key, capturedFiles[key]) })
-    fetch("/", { method: "POST", body: fd })
-      .then(r => { if (r.ok) window.location.href = "/success.html"; else throw new Error() })
+
+    const toBase64 = (file) => new Promise(resolve => {
+      if (!file) return resolve('')
+      const r = new FileReader()
+      r.onload = () => resolve(r.result)
+      r.readAsDataURL(file)
+    })
+
+    const payload = { ...formData }
+    for (const key of Object.keys(capturedFiles)) {
+      payload[key] = await toBase64(capturedFiles[key])
+    }
+
+    const apiUrl = import.meta.env.VITE_FORM_API || ''
+    if (!apiUrl) {
+      alert('Form API not configured')
+      if (btn) { btn.disabled = false; btn.innerText = t.form.submit }
+      return
+    }
+
+    fetch(apiUrl, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' } })
+      .then(r => r.json())
+      .then(r => { if (r.ok) window.location.href = "/success.html"; else throw new Error(r.error) })
       .catch(() => { alert("Error"); if (btn) { btn.disabled = false; btn.innerText = t.form.submit } })
   }
 
