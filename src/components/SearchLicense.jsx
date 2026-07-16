@@ -21,7 +21,7 @@ function parseCSVLine(line) {
 function getDirectImageUrl(url) {
   if (!url) return ''
   const m = url.match(/\/file\/d\/([^/]+)/)
-  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400`
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}=w400`
   return /^https?:\/\//i.test(url) ? url : ''
 }
 
@@ -77,18 +77,9 @@ const SearchLicense = () => {
       const pw = doc.internal.pageSize.getWidth()
       const ph = doc.internal.pageSize.getHeight()
 
-      const loadImage = (src, cors) => new Promise(resolve => {
-        const i = new Image()
-        if (cors) i.crossOrigin = 'anonymous'
-        i.onload = () => resolve(i)
-        i.onerror = () => resolve(null)
-        i.src = src
+      const iaaImg = await new Promise(resolve => {
+        const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = iaaLogo
       })
-
-      const [iaaImg, fotoImg] = await Promise.all([
-        loadImage(iaaLogo),
-        result.fotoUrl ? loadImage(result.fotoUrl, true) : null,
-      ])
 
       try {
         if (iaaImg) {
@@ -131,14 +122,20 @@ const SearchLicense = () => {
         doc.text(': ' + value, 85, y); y += 9
       })
 
-      try {
-        if (fotoImg) {
-          const fotoW = 55; const fotoH = Math.min((fotoImg.height / fotoImg.width) * fotoW, 70)
-          doc.addImage(fotoImg, 'JPEG', 150, 55, fotoW, fotoH)
+      if (result.fotoUrl) {
+        try {
+          const resp = await fetch(result.fotoUrl, { mode: 'cors' })
+          const blob = await resp.blob()
+          const b64 = await new Promise(resolve => {
+            const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
+          })
+          const ext = blob.type === 'image/jpeg' ? 'JPEG' : 'PNG'
+          const fotoW = 55; const fotoH = 70
+          doc.addImage(b64, ext, 150, 55, fotoW, fotoH)
           doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
           doc.rect(150, 55, fotoW, fotoH)
-        }
-      } catch {}
+        } catch (e2) { console.warn('foto falló:', e2) }
+      }
 
       doc.setDrawColor(200); doc.setLineWidth(0.3)
       doc.line(20, y + 5, pw - 20, y + 5); y += 14
