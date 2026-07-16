@@ -76,17 +76,30 @@ const SearchLicense = () => {
     const pw = doc.internal.pageSize.getWidth()
     const ph = doc.internal.pageSize.getHeight()
 
-    const imgBlob = await fetch(iaaLogo).then(r => r.blob())
-    const dataUrl = await new Promise(resolve => {
-      const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(imgBlob)
-    })
-    const img = await new Promise(resolve => {
-      const i = new Image(); i.onload = () => resolve(i); i.src = dataUrl
-    })
-    const wmW = 100; const wmH = (img.height / img.width) * wmW
-    doc.setGState(new GState({ opacity: 0.2 }))
-    doc.addImage(dataUrl, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
-    doc.setGState(new GState({ opacity: 1 }))
+    const loadImageDataUrl = async (url) => {
+      if (!url) return null
+      try {
+        const blob = await fetch(url).then(r => r.blob())
+        return await new Promise(resolve => {
+          const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
+        })
+      } catch { return null }
+    }
+
+    const [iaaDataUrl, fotoDataUrl] = await Promise.all([
+      loadImageDataUrl(iaaLogo),
+      loadImageDataUrl(result.fotoUrl),
+    ])
+
+    if (iaaDataUrl) {
+      const img = await new Promise(resolve => {
+        const i = new Image(); i.onload = () => resolve(i); i.src = iaaDataUrl
+      })
+      const wmW = 100; const wmH = (img.height / img.width) * wmW
+      doc.setGState(new GState({ opacity: 0.2 }))
+      doc.addImage(iaaDataUrl, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
+      doc.setGState(new GState({ opacity: 1 }))
+    }
 
     const endorseText = lang === 'es' ? 'Avalado por IAA · ONU · FIA' : 'Endorsed by IAA · UN · FIA'
 
@@ -119,6 +132,19 @@ const SearchLicense = () => {
       doc.text(label, 25, y); doc.setFont('helvetica', 'normal')
       doc.text(': ' + value, 85, y); y += 9
     })
+
+    if (fotoDataUrl) {
+      try {
+        const foto = await new Promise(resolve => {
+          const i = new Image(); i.onload = () => resolve(i); i.src = fotoDataUrl
+        })
+        const fotoW = 55; const fotoH = (foto.height / foto.width) * fotoW
+        doc.addImage(fotoDataUrl, 'PNG', 150, 55, fotoW, Math.min(fotoH, 70))
+        doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
+        doc.rect(150, 55, fotoW, Math.min(fotoH, 70))
+      } catch {}
+    }
+
     doc.setDrawColor(200); doc.setLineWidth(0.3)
     doc.line(20, y + 5, pw - 20, y + 5); y += 14
     doc.setFontSize(8); doc.setFont('helvetica', 'italic')
