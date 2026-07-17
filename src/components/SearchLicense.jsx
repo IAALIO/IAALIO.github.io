@@ -86,7 +86,13 @@ const SearchLicense = () => {
       const ph = doc.internal.pageSize.getHeight()
 
       const loadImg = (src) => new Promise(resolve => {
-        const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = src
+        const i = new Image(); i.crossOrigin = 'Anonymous'; i.onload = () => {
+          const c = document.createElement('canvas')
+          c.width = i.naturalWidth || 200; c.height = i.naturalHeight || 80
+          c.getContext('2d').drawImage(i, 0, 0)
+          const dataUrl = c.toDataURL('image/png')
+          const img = new Image(); img.onload = () => resolve(img); img.src = dataUrl
+        }; i.onerror = () => resolve(null); i.src = src
       })
 
       const [iaaImg, unImg, fiaImg] = await Promise.all([
@@ -95,9 +101,9 @@ const SearchLicense = () => {
 
       try {
         if (iaaImg) {
-          const wmW = 100; const wmH = (iaaImg.height / iaaImg.width) * wmW
-          doc.setGState(new GState({ opacity: 0.15 }))
-          doc.addImage(iaaImg, 'PNG', (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
+          const wmW = 100; const wmH = (iaaImg.naturalHeight || iaaImg.height || 100) / (iaaImg.naturalWidth || iaaImg.width || 100) * wmW
+          doc.setGState(new GState({ opacity: 0.12 }))
+          doc.addImage(iaaImg, (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
           doc.setGState(new GState({ opacity: 1 }))
         }
       } catch {}
@@ -194,6 +200,27 @@ const SearchLicense = () => {
         y += thumbH + 10
       }
 
+      if (result.firmaUrl) {
+        y += 2
+        try {
+          const resp = await fetch(result.firmaUrl, { mode: 'cors' })
+          const blob = await resp.blob()
+          const b64 = await new Promise(resolve => {
+            const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
+          })
+          const ext = blob.type === 'image/jpeg' ? 'JPEG' : 'PNG'
+          const sigW = 50; const sigH = 18
+          doc.addImage(b64, ext, 20, y, sigW, sigH)
+          doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5)
+          doc.text(es ? 'Firma del titular' : 'Holder\'s signature', 20, y + sigH + 3)
+          if (result.nombre) {
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5)
+            doc.text(result.nombre, 20, y + sigH + 8)
+          }
+          y += sigH + 14
+        } catch {}
+      }
+
       doc.setDrawColor(200); doc.setLineWidth(0.3)
       doc.line(20, y, pw - 20, y); y += 8
 
@@ -250,8 +277,8 @@ const SearchLicense = () => {
       let lx = (pw - totalW) / 2
       logos.forEach(({ img, label }) => {
         if (img) {
-          const lh = (img.height / img.width) * logoW
-          try { doc.addImage(img, 'PNG', lx, y, logoW, lh) } catch {}
+          const lh = (img.naturalHeight || img.height || 20) / (img.naturalWidth || img.width || 60) * logoW
+          try { doc.addImage(img, lx, y, logoW, lh) } catch {}
         }
         lx += logoW + logoGap
       })
