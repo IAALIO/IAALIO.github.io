@@ -1,122 +1,141 @@
-# LIO → IAA Project Documentation
+# IAA Project Documentation
 
 ## URLs
-- **Site:** https://IAALIO.github.io/
-- **GitHub Org:** https://github.com/IAALIO
-- **GitHub Repo:** https://github.com/IAALIO/IAALIO.github.io
-- **Dominio anterior (Netlify):** licenseinternationalofficial.netlify.app (sin créditos)
+| Recurso | URL |
+|---------|-----|
+| **Sitio web** | https://IAALIO.github.io/ |
+| **GitHub org** | https://github.com/IAALIO |
+| **GitHub repo** | https://github.com/IAALIO/IAALIO.github.io |
+| **Admin panel** | https://IAALIO.github.io/#admin |
+| **Form API (Apps Script)** | `https://script.google.com/macros/s/AKfycbx0gQ3CD231T3oX69LQ7PJ-JdC7KB4fx0LUKoOdyMiJ93rcwV60gf31mAikekc0vj--/exec` |
+| **CSV público (licencias)** | `https://docs.google.com/spreadsheets/d/e/2PACX-1vQcLOEKNE8N8-dRiH9ZhFxxbpK59mSE8gc-Of1wya6QH6HuOQvs1l6pFnxM35HoUhUsOCI12p03n5YY/pub?output=csv` |
+| **Google Sheet (solicitudes)** | `19tfesoT1l-k9ee2d9R2u-qmUUGNlkrQ-soPcltI21QI` |
+| **Drive folder (fotos)** | `1sAgajm3yoK2g0Y5w9a1ZqbnJGcWqWcac` (IAA-Licencias) |
 
 ## Credenciales
-- **GitHub Token:** `ghp_xxxx` (classic, repo + workflow scope — saved in AGENTS.md local)
-- **Google Apps Script URL:** `https://script.google.com/macros/s/AKfycbx0BP-n-yHe2PGEGjmpQRKdm72VdQ-Yo095qMCnIPP7T5xoSs4AW6ki4XVaHUwcW_-X/exec`
-- **Drive Folder ID (IAA-Licencias):** `1sAgajm3yoK2g0Y5w9a1ZqbnJGcWqWcac`
-- **Google Sheet ID (IAA-Solicitudes):** `19tfesoT1l-k9ee2d9R2u-qmUUGNlkrQ-soPcltI21QI`
-- **VITE_ADMIN_PASSWORD:** `LIO-ADMIN-2024`
-- **Google Sheets CSV (público):** `https://docs.google.com/spreadsheets/d/e/2PACX-1vQcLOEKNE8N8-dRiH9ZhFxxbpK59mSE8gc-Of1wya6QH6HuOQvs1l6pFnxM35HoUhUsOCI12p03n5YY/pub?output=csv`
+- **GitHub Token:** classic, scope `repo`+`workflow` (token actual guardado localmente, no en el repo)
+- **Admin password:** `LIO-ADMIN-2024`
+- **Apps Script proyecto:** `IAA-Form-API-v2` en https://script.google.com
+- **Email notificaciones:** `license.international.official@gmail.com`
 
-## Deploy
-- **Plataforma:** GitHub Pages (gratis, ilimitado)
-- **Auto-deploy via GitHub Actions** en cada push a `main`
-- Workflow: `.github/workflows/deploy.yml` — build con Node 22, copia `index.html` a `404.html` (SPA routing), deploy a Pages
-- Se activó Actions como Source en Settings → Pages
+## Deploy (GitHub Pages + Actions)
+- **Push a `main`** → GitHub Actions build con Node 22 → deploy a Pages
+- Workflow: `.github/workflows/deploy.yml`
+- `base: './'` en vite.config.js para rutas relativas
+- `index.html` copiado a `404.html` para SPA routing
+- Variables de entorno (VITE_FORM_API, etc.) definidas en el workflow
 
 ## Estructura del Proyecto
 ```
 lio-new/
-├── .github/workflows/deploy.yml    # GitHub Actions deploy
+├── .github/workflows/deploy.yml       # Build + deploy automático
 ├── public/
-│   ├── favicon.png                  # Logo IAA como favicon
-│   ├── favicon.svg                  # (viejo, no usado)
-│   ├── success.html                 # Página post-submit
-│   └── forms.html                   # (Netlify legacy)
+│   ├── favicon.png                     # Logo IAA
+│   ├── success.html                    # Página posterior al envío
 ├── src/
 │   ├── assets/images/
-│   │   ├── iaa-logo.png             # Logo IAA 1080x1078 (alta resolución)
-│   │   ├── un-logo.svg              # Logo ONU oficial (vector)
-│   │   ├── fia-logo.svg             # Logo FIA (vector texto)
-│   │   ├── licencia-frente.png      # Foto ejemplo documento
-│   │   ├── licencia-dorso.png       # Foto ejemplo documento
-│   │   ├── folleto-traduccion.png   # Foto ejemplo documento
-│   │   └── package-completo.png     # Foto ejemplo documento
+│   │   ├── iaa-logo.png                # Logo IAA 1080x1078
+│   │   ├── un-logo.svg                 # Logo ONU
+│   │   ├── fia-logo.svg                # Logo FIA
+│   │   ├── licencia-frente.png         # Fotos ejemplo documentos
+│   │   ├── licencia-dorso.png
+│   │   ├── folleto-traduccion.png
+│   │   └── package-completo.png
 │   ├── components/
-│   │   ├── Navbar.jsx               # Logo IAA como marca, sin filter
-│   │   ├── Hero.jsx                 # IAA, UN, FIA logos en trust card
-│   │   ├── Footer.jsx               # Logo IAA + texto
-│   │   ├── UrgencyBar.jsx           # Badge "IAA · ONU · FIA"
-│   │   ├── ApplicationForm.jsx      # Formulario multi-step con fotos → base64 → JSON
-│   │   ├── SearchLicense.jsx        # Consulta CSV + PDF generation
-│   │   ├── Pricing.jsx              # Planes con botón "Aplicar"
-│   │   ├── TrustBadges.jsx          # Badges de confianza
-│   │   ├── CounterSection.jsx       # Contador de licencias
-│   │   ├── Testimonials.jsx         # Testimonios
-│   │   ├── DocumentShowcase.jsx     # Muestra fotos de documentos reales
-│   │   ├── HowItWorks.jsx           # Pasos
-│   │   ├── Requirements.jsx         # Requisitos
-│   │   ├── FAQ.jsx                  # Preguntas frecuentes
-│   │   ├── AdminPanel.jsx           # Panel admin (descarga CSV)
-│   │   └── WhatsAppButton.jsx       # Botón flotante WhatsApp
-│   ├── data/translations.js         # ES/EN textos
-│   └── App.jsx                      # Layout principal
-├── index.html                       # Title "IAA - License International Official"
-├── vite.config.js                   # base: './' para GitHub Pages
-├── netlify.toml                     # (legacy, no usado)
-├── AppsScript.gs                    # Google Apps Script para forms
-└── AGENTS.md                        # Este archivo
+│   │   ├── Navbar.jsx                  # Logo IAA + navegación
+│   │   ├── Hero.jsx                    # Hero con logos IAA/UN/FIA
+│   │   ├── Footer.jsx                  # Footer con logo IAA
+│   │   ├── UrgencyBar.jsx              # Badge "IAA · ONU · FIA"
+│   │   ├── ApplicationForm.jsx         # Formulario 4 pasos → base64 → JSON → no-cors
+│   │   ├── SearchLicense.jsx           # Consulta licencias + PDF con jsPDF
+│   │   ├── Pricing.jsx                 # Planes con botón "Aplicar"
+│   │   ├── TrustBadges.jsx             # Sellos de confianza
+│   │   ├── CounterSection.jsx          # Contador animado
+│   │   ├── Testimonials.jsx            # Testimonios
+│   │   ├── DocumentShowcase.jsx        # Galería de documentos
+│   │   ├── HowItWorks.jsx              # Pasos del trámite
+│   │   ├── Requirements.jsx            # Requisitos
+│   │   ├── FAQ.jsx                     # Preguntas frecuentes
+│   │   ├── AdminPanel.jsx              # Dashboard (password, CSV, búsqueda)
+│   │   └── WhatsAppButton.jsx          # Flotante WhatsApp
+│   ├── data/translations.js            # ES/EN bilingüe
+│   └── App.jsx                         # Layout + ruteo (#admin)
+├── index.html                          # Title: "IAA - License International Official"
+├── vite.config.js                      # base: './'
+├── AppsScript.gs                       # Código del Google Apps Script
+└── AGENTS.md                           # Este archivo
 ```
 
-## Paleta de Colores
-- **Primary:** `#0d132d` (azul marino oscuro)
+## Google Apps Script (IAA-Form-API-v2)
+**Ubicación:** https://script.google.com (proyecto `IAA-Form-API-v2`)
+
+### Funcionamiento
+1. Frontend envía POST con `mode: 'no-cors'` (evita CORS)
+2. Google redirige a script.googleusercontent.com (echo)
+3. Script procesa los datos:
+   - Crea subcarpeta `LIC-YYYYMMDD-HHmmss` dentro de `IAA-Licencias`
+   - Guarda las 4 fotos (carnet, firma, ID, licencia) en esa subcarpeta
+   - Agrega fila al Sheet `IAA-Solicitudes` → pestaña `Aplicantes`
+   - Envía email a `license.international.official@gmail.com`
+4. Frontend redirige a `success.html` independientemente de la respuesta
+
+### Si se necesita modificar
+1. Ir a https://script.google.com → abrir `IAA-Form-API-v2`
+2. Editar código
+3. **Deploy** → **Manage deployments** → lápiz → **New version** → **Deploy**
+4. Copiar nueva URL y actualizar `VITE_FORM_API` en `.github/workflows/deploy.yml`
+
+## AdminPanel
+**Acceso:** `/#admin` en el sitio
+
+### Qué hace
+- Lee licencias del CSV público de Google Sheets
+- Busca por nombre, ID o trámite
+- Muestra detalle de cada licencia (vencimiento, datos físicos, foto)
+- Exporta CSV completo
+- Genera líneas CSV para agregar nuevas licencias (copia al portapapeles)
+- **Contraseña:** `LIO-ADMIN-2024`
+
+### Nota
+El AdminPanel es independiente del formulario de solicitudes. El formulario envía datos al Apps Script (Sheet de solicitudes + Drive), mientras que el AdminPanel consulta un CSV de licencias ya emitidas.
+
+## PDF (SearchLicense.jsx)
+- jsPDF v4.2.1
+- Watermark IAA al centro (opacidad 15%)
+- Header bilingüe español/inglés
+- Foto del aplicante (40x48mm) desde Googleusercontent
+- Cláusulas legales: Convención Ginebra 1949, Viena 1968
+- Footer con logos IAA/UN/FIA
+- Cada sección con try-catch individual
+
+## Funcionalidad de colores
+- **Primary:** `#0d132d` (azul marino)
 - **Accent:** `#cf2e2e` (rojo)
 - **Bg section:** `#fbfbfb` (blanco hueso)
 
-## PDF Generation (SearchLicense.jsx:73-208)
-- **Librería:** jsPDF v4.2.1
-- **Watermark:** Logo IAA al centro con GState opacity 0.15
-- **Header:** Título bilingüe, "IAA - License International Official", "Avalado por IAA · ONU · FIA"
-- **Cuerpo:** Campos del aplicante a la izquierda (x=20), foto 40x48mm a la derecha (x=148)
-- **Legal clauses:** Base legal con Convención Ginebra 1949, Viena 1968, ONU, FIA
-- **Footer:** Logos IAA, UN, FIA lado a lado + texto de cierre
-- **Foto:** Fetch desde lh3.googleusercontent.com → blob → base64 → addImage
-- **On error:** Cada sección con try-catch individual, nunca bloquea el PDF
+## Estado del proyecto
+### Completado
+- [x] Sitio completo con branding IAA/UN/FIA
+- [x] Paleta azul+rojo+blanco
+- [x] Formulario multi-step con fotos
+- [x] PDF con watermark, foto, cláusulas legales
+- [x] Google Apps Script desplegado y funcional (v2)
+- [x] Formulario envía datos a Sheet + Drive + email
+- [x] Fotos organizadas en subcarpetas por solicitante
+- [x] CORS resuelto con `mode: 'no-cors'`
+- [x] GitHub Pages + Actions deploy automático
+- [x] AdminPanel funcional (CSV, búsqueda, exportación)
+- [x] Placeholders descriptivos y formato DD/MM/AAAA
 
-## Formulario (ApplicationForm.jsx)
-- 4 pasos: datos personales, físicos, fotos, contacto
-- Envío: Convierte fotos a base64, envía JSON a `VITE_FORM_API` con `mode: 'no-cors'` (CORS fix)
-- **AppsScript.gs:** Recibe JSON, guarda en Google Sheet, sube fotos a Drive, envía email
-- Email envuelto en try-catch (falla silenciosamente si no hay sesión activa)
-- **Proyecto Apps Script:** IAA-Form-API-v2 (script.google.com)
-
-## Estado Actual (Completado)
-- [x] Paleta azul+blanco+rojo (latinolicencias.com)
-- [x] Logo IAA como marca principal (Navbar, Footer)
-- [x] Hero con IAA, UN, FIA visibles en móvil y desktop
-- [x] Textos "Avalado por IAA · ONU · FIA" en toda la page
-- [x] DocumentShowcase con fotos reales
-- [x] Payment: Binance primero, PayPal, Zelle, Bancos Int/Locales
-- [x] Botón "Aplicar" en pricing
-- [x] WhatsApp flotante (no en CTAs)
-- [x] PDF con watermark IAA, foto aplicante, cláusulas legales
-- [x] PDF footer con logos IAA, UN, FIA
-- [x] GitHub Pages deploy via Actions
-- [x] 404.html para SPA routing
-- [x] Favicon IAA
-- [x] Title "IAA - License International Official"
-- [x] Google Apps Script desplegado (v2) con Drive/Sheet/email
-- [x] CORS solucionado (no-cors mode en fetch)
-- [x] Token GitHub renovado y funcional
-
-## Pendiente
-- [ ] **Pegar código final en IAA-Form-API-v2 y desplegar** (AppsScript.gs en unblock.txt)
-- [ ] **Autorizar doPost y doGet** desde el editor de script.google.com
-- [ ] **Probar formulario** en https://IAALIO.github.io (esperar deploy de GitHub Actions)
-- [ ] Revisar PDF: asegurar que foto y watermark se vean bien
+### Pendiente
+- [ ] Revisar PDF (foto y watermark visualmente)
 - [ ] Dominio propio (opcional, ~$10/año)
-- [ ] Probar que la consulta de licencias funciona (depende del CSV de Google Sheets)
-- [ ] El token de GitHub vence? (classic, no expira)
+- [ ] Probar consulta de licencias (depende del CSV)
+- [ ] Token GitHub (classic, no expira)
 
 ## Comandos útiles
 ```bash
-npm run dev      # Desarrollo local
-npm run build    # Build producción
-git push         # Trigger deploy
+npm run dev        # Desarrollo local
+npm run build      # Build producción
+git push           # Trigger deploy
 ```
