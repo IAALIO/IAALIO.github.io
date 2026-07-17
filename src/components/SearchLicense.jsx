@@ -92,11 +92,14 @@ const SearchLicense = () => {
           if (!resp.ok) return null
           if (src.endsWith('.svg') || resp.headers.get('content-type')?.includes('svg')) {
             const text = await resp.text()
+            const blob = new Blob([text], { type: 'image/svg+xml' })
+            const url = URL.createObjectURL(blob)
             const img = new Image()
-            await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(text) })
+            await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url })
             const c = document.createElement('canvas')
             c.width = img.naturalWidth || 200; c.height = img.naturalHeight || 60
             c.getContext('2d').drawImage(img, 0, 0)
+            URL.revokeObjectURL(url)
             return c.toDataURL('image/png')
           } else {
             const blob = await resp.blob()
@@ -287,7 +290,7 @@ const SearchLicense = () => {
         try { doc.addImage(url, 'PNG', lx, y, logoSize, logoSize) } catch {}
         lx += logoSize + 6
       })
-      y += 10
+      y += logoSize + 5
 
       doc.setFont('helvetica', 'italic'); doc.setFontSize(6)
       doc.text(es
