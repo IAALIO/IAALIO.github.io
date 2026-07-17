@@ -101,8 +101,8 @@ const SearchLicense = () => {
 
       try {
         if (iaaImg) {
-          const wmW = 100; const wmH = (iaaImg.naturalHeight || iaaImg.height || 100) / (iaaImg.naturalWidth || iaaImg.width || 100) * wmW
-          doc.setGState(new GState({ opacity: 0.12 }))
+          const wmW = 120; const wmH = (iaaImg.naturalHeight || iaaImg.height || 100) / (iaaImg.naturalWidth || iaaImg.width || 100) * wmW
+          doc.setGState(new GState({ opacity: 0.15 }))
           doc.addImage(iaaImg, (pw - wmW) / 2, (ph - wmH) / 2, wmW, wmH)
           doc.setGState(new GState({ opacity: 1 }))
         }
@@ -112,21 +112,21 @@ const SearchLicense = () => {
       const endorseText = es ? 'Avalado por IAA · ONU · FIA' : 'Endorsed by IAA · UN · FIA'
 
       doc.setFont('helvetica', 'bold')
-      doc.setFontSize(16); doc.text('INTERNATIONAL DRIVING PERMIT', pw / 2, 18, { align: 'center' })
-      doc.text('PERMISO INTERNACIONAL DE CONDUCIR', pw / 2, 26, { align: 'center' })
-      doc.setFontSize(9); doc.setFont('helvetica', 'normal')
-      doc.text('IAA - License International Official', pw / 2, 34, { align: 'center' })
-      doc.setFontSize(8); doc.setFont('helvetica', 'bold')
-      doc.text(endorseText, pw / 2, 40, { align: 'center' })
+      doc.setFontSize(14); doc.text('INTERNATIONAL DRIVING PERMIT', pw / 2, 14, { align: 'center' })
+      doc.text('PERMISO INTERNACIONAL DE CONDUCIR', pw / 2, 20, { align: 'center' })
+      doc.setFontSize(8); doc.setFont('helvetica', 'normal')
+      doc.text('IAA - License International Official', pw / 2, 26, { align: 'center' })
+      doc.setFontSize(7); doc.setFont('helvetica', 'bold')
+      doc.text(endorseText, pw / 2, 31, { align: 'center' })
       doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
-      doc.line(20, 44, pw - 20, 44)
+      doc.line(20, 34, pw - 20, 34)
 
       const leftX = 20
-      const labelX = 70
-      let y = 52
-      const lineH = 7.5
+      const labelX = 72
+      let y = 39
+      const lineH = 6
 
-      doc.setFontSize(9)
+      doc.setFontSize(8)
       const fields = [
         ['1. Holder / Titular', result.nombre || ''],
         ['2. Date of Birth / F. Nacimiento', result.fechaNacimiento || ''],
@@ -148,7 +148,7 @@ const SearchLicense = () => {
         y += lineH
       })
 
-      const fotoY = 52
+      const fotoY = 39
       if (result.fotoUrl) {
         try {
           const resp = await fetch(result.fotoUrl, { mode: 'cors' })
@@ -157,26 +157,26 @@ const SearchLicense = () => {
             const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
           })
           const ext = blob.type === 'image/jpeg' ? 'JPEG' : 'PNG'
-          const fotoW = 40; const fotoH = 48
-          doc.addImage(b64, ext, 148, fotoY, fotoW, fotoH)
+          const fotoW = 35; const fotoH = 42
+          doc.addImage(b64, ext, 150, fotoY, fotoW, fotoH)
           doc.setDrawColor(37, 99, 235); doc.setLineWidth(0.5)
-          doc.rect(148, fotoY, fotoW, fotoH)
-        } catch (e2) { console.warn('foto falló:', e2) }
+          doc.rect(150, fotoY, fotoW, fotoH)
+        } catch {}
       }
 
-      y = Math.max(y, fotoY + 48 + 6) + 2
+      y = Math.max(y, fotoY + 42 + 4) + 1
 
       if (result.link || result.firmaUrl || result.cedulaUrl) {
         doc.setDrawColor(200); doc.setLineWidth(0.3)
-        doc.line(20, y, pw - 20, y); y += 8
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(9)
-        doc.text(es ? 'DOCUMENTOS ADJUNTOS' : 'ATTACHED DOCUMENTS', pw / 2, y, { align: 'center' }); y += 6
+        doc.line(20, y, pw - 20, y); y += 5
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8)
+        doc.text(es ? 'DOCUMENTOS ADJUNTOS' : 'ATTACHED DOCUMENTS', pw / 2, y, { align: 'center' }); y += 4
 
-        const thumbW = 45; const thumbH = 32; const thumbGap = 5
+        const thumbW = 38; const thumbH = 26; const thumbGap = 5
         const docs = [
-          { url: result.link, label: es ? 'Licencia Local' : 'Local License' },
-          { url: result.firmaUrl, label: es ? 'Firma' : 'Signature' },
-          { url: result.cedulaUrl, label: es ? 'Cédula / ID' : 'ID Document' },
+          { url: result.link, label: es ? 'Licencia' : 'License' },
+          { url: result.firmaUrl, label: 'Firma' },
+          { url: result.cedulaUrl, label: es ? 'Cédula' : 'ID' },
         ].filter(d => d.url)
         const totalDocsW = docs.length * thumbW + (docs.length - 1) * thumbGap
         let dx = (pw - totalDocsW) / 2
@@ -192,16 +192,17 @@ const SearchLicense = () => {
             doc.addImage(b64, ext, dx, y, thumbW, thumbH)
             doc.setDrawColor(200); doc.setLineWidth(0.3)
             doc.rect(dx, y, thumbW, thumbH)
-            doc.setFont('helvetica', 'italic'); doc.setFontSize(6)
-            doc.text(docItem.label, dx + thumbW / 2, y + thumbH + 4, { align: 'center' })
+            doc.setFont('helvetica', 'italic'); doc.setFontSize(5.5)
+            doc.text(docItem.label, dx + thumbW / 2, y + thumbH + 3, { align: 'center' })
           } catch {}
           dx += thumbW + thumbGap
         }
-        y += thumbH + 10
+        y += thumbH + 8
       }
 
       if (result.firmaUrl) {
-        y += 2
+        y += 1
+        const sigW = 45; const sigH = 16
         try {
           const resp = await fetch(result.firmaUrl, { mode: 'cors' })
           const blob = await resp.blob()
@@ -209,20 +210,24 @@ const SearchLicense = () => {
             const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
           })
           const ext = blob.type === 'image/jpeg' ? 'JPEG' : 'PNG'
-          const sigW = 50; const sigH = 18
-          doc.addImage(b64, ext, 20, y, sigW, sigH)
-          doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5)
-          doc.text(es ? 'Firma del titular' : 'Holder\'s signature', 20, y + sigH + 3)
-          if (result.nombre) {
-            doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5)
-            doc.text(result.nombre, 20, y + sigH + 8)
+          const sigX = (pw - sigW) / 2
+          doc.addImage(b64, ext, sigX, y, sigW, sigH)
+          doc.setFont('helvetica', 'italic'); doc.setFontSize(6)
+          doc.text(es ? 'Firma del titular / Holder\'s signature' : 'Holder\'s signature / Firma del titular', pw / 2, y + sigH + 3, { align: 'center' })
+          y += sigH + 7
+          if (result.nombre || result.id) {
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(6)
+            const nameLine = result.nombre || ''
+            const idLine = result.id ? `N° ${result.id}` : ''
+            doc.text(nameLine, pw / 2, y, { align: 'center' })
+            if (idLine) doc.text(idLine, pw / 2, y + 3.5, { align: 'center' })
+            y += 8
           }
-          y += sigH + 14
         } catch {}
       }
 
       doc.setDrawColor(200); doc.setLineWidth(0.3)
-      doc.line(20, y, pw - 20, y); y += 8
+      doc.line(20, y, pw - 20, y); y += 6
 
       const legalClauses = es ? [
         'BASE LEGAL',
@@ -236,7 +241,6 @@ const SearchLicense = () => {
         '',
         'Válido en más de 160 países miembros de las Naciones Unidas y signatarios de los convenios.',
         'Debe portarse siempre junto con la licencia de conducir original del titular.',
-        'Este documento es complementario a la licencia nacional y no la sustituye.',
       ] : [
         'LEGAL BASIS',
         'This International Driving Permit is issued by IAA (International Automobile Association)',
@@ -249,48 +253,47 @@ const SearchLicense = () => {
         '',
         'Valid in over 160 UN member states and signatory countries.',
         'Must be carried together with the original national driving license.',
-        'This document is complementary to the national license and does not replace it.',
       ]
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(8)
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(7)
       legalClauses.forEach(line => {
         if (line === 'BASE LEGAL' || line === 'LEGAL BASIS') {
-          doc.setFont('helvetica', 'bold'); doc.setFontSize(10)
-          doc.text(line, pw / 2, y, { align: 'center' }); y += 5
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5)
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(8)
+          doc.text(line, pw / 2, y, { align: 'center' }); y += 4
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5)
         } else if (line === '') {
-          y += 2
+          y += 1.5
         } else {
-          doc.text(line, 25, y, { maxWidth: 165 }); y += 4.5
+          doc.text(line, 25, y, { maxWidth: 160 }); y += 3.5
         }
       })
 
-      y += 4
+      y += 3
       doc.setDrawColor(200); doc.setLineWidth(0.3)
-      doc.line(20, y, pw - 20, y); y += 7
+      doc.line(20, y, pw - 20, y); y += 5
 
       const logos = [
         { img: iaaImg, label: 'IAA' },
         { img: unImg, label: 'UN' },
         { img: fiaImg, label: 'FIA' },
       ]
-      const logoW = 18; const logoGap = 8; const totalW = logos.length * logoW + (logos.length - 1) * logoGap
+      const logoW = 16; const logoGap = 6; const totalW = logos.length * logoW + (logos.length - 1) * logoGap
       let lx = (pw - totalW) / 2
-      logos.forEach(({ img, label }) => {
+      logos.forEach(({ img }) => {
         if (img) {
           const lh = (img.naturalHeight || img.height || 20) / (img.naturalWidth || img.width || 60) * logoW
           try { doc.addImage(img, lx, y, logoW, lh) } catch {}
         }
         lx += logoW + logoGap
       })
-      y += 12
+      y += 10
 
-      doc.setFont('helvetica', 'italic'); doc.setFontSize(7)
+      doc.setFont('helvetica', 'italic'); doc.setFontSize(6)
       doc.text(es
         ? 'Documento oficial emitido por IAA - License International Official.'
         : 'Official document issued by IAA - License International Official.',
         pw / 2, y, { align: 'center' })
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5)
-      doc.text(`IAA — ${endorseText}`, pw / 2, y + 4, { align: 'center' })
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(5.5)
+      doc.text(`IAA — ${endorseText}`, pw / 2, y + 3.5, { align: 'center' })
 
       const pdfUrl = doc.output('bloburl')
       window.open(pdfUrl, '_blank')
