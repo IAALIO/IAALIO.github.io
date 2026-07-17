@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Lock, LayoutDashboard, Users, FileText, LogOut, ArrowLeft, Search, RefreshCw, ShieldCheck, Download, Eye, X, ExternalLink, Plus, Check } from 'lucide-react'
+import { Lock, LayoutDashboard, Users, FileText, LogOut, ArrowLeft, Search, RefreshCw, ShieldCheck, Download, Eye, X, Plus, Check } from 'lucide-react'
 import { useLang } from '../App'
+
+function getDirectImageUrl(url) {
+  if (!url) return ''
+  const m = url.match(/\/file\/d\/([^/]+)/)
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}=w400`
+  return /^https?:\/\//i.test(url) ? url : ''
+}
 
 function parseCSVLine(line) {
   const result = []
@@ -28,7 +35,7 @@ const AdminPanel = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selected, setSelected] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
-  const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '' })
+  const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '', firma: '', cedula: '' })
   const [addSuccess, setAddSuccess] = useState(false)
 
   useEffect(() => {
@@ -50,6 +57,7 @@ const AdminPanel = () => {
           nacionalidad: r[8] || '', estatura: r[9] || '',
           tipoSangre: r[10] || '', colorOjos: r[11] || '',
           fotoUrl: r[12] || '', paisValido: r[13] || '',
+          firmaUrl: r[14] || '', cedulaUrl: r[15] || '',
         }
       })
       setLicenses(data)
@@ -76,9 +84,9 @@ const AdminPanel = () => {
   }
 
   const exportCSV = () => {
-    const header = 'Documento,ID Tramite,Nombre,Vencimiento,Estado,Categoria,LINK,Fecha Nac,Nacionalidad,Estatura,Sangre,Ojos,Foto URL,Pais Valido'
+    const header = 'Documento,ID Tramite,Nombre,Vencimiento,Estado,Categoria,LINK,Fecha Nac,Nacionalidad,Estatura,Sangre,Ojos,Foto URL,Pais Valido,Firma,Cedula'
     const rows = licenses.map(l =>
-      `${l.id},${l.id_tramite},"${l.nombre}",${l.validoHasta},${l.estado},${l.tipo},${l.link},${l.fechaNacimiento},${l.nacionalidad},${l.estatura},${l.tipoSangre},${l.colorOjos},${l.fotoUrl},${l.paisValido}`
+      `${l.id},${l.id_tramite},"${l.nombre}",${l.validoHasta},${l.estado},${l.tipo},${l.link},${l.fechaNacimiento},${l.nacionalidad},${l.estatura},${l.tipoSangre},${l.colorOjos},${l.fotoUrl},${l.paisValido},${l.firmaUrl},${l.cedulaUrl}`
     ).join('\n')
     const blob = new Blob([header + '\n' + rows], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -94,7 +102,7 @@ const AdminPanel = () => {
   const handleAddSubmit = (e) => {
     e.preventDefault()
     if (!addForm.docId || !addForm.nombre) { alert(lang === 'es' ? 'Completa Documento y Nombre' : 'Complete Document and Name'); return }
-    const csvLine = `${addForm.docId},${addForm.tramite},"${addForm.nombre}",${addForm.vencimiento},ACTIVA,${addForm.categoria},${addForm.link},${addForm.nacimiento},${addForm.nacionalidad},${addForm.estatura},${addForm.sangre},${addForm.ojos},${addForm.foto},${addForm.pais}`
+    const csvLine = `${addForm.docId},${addForm.tramite},"${addForm.nombre}",${addForm.vencimiento},ACTIVA,${addForm.categoria},${addForm.link},${addForm.nacimiento},${addForm.nacionalidad},${addForm.estatura},${addForm.sangre},${addForm.ojos},${addForm.foto},${addForm.pais},${addForm.firma},${addForm.cedula}`
     navigator.clipboard.writeText(csvLine)
     setAddSuccess(true)
     setTimeout(() => setAddSuccess(false), 3000)
@@ -209,6 +217,8 @@ const AdminPanel = () => {
                 <input type="text" name="ojos" value={addForm.ojos} onChange={handleAddChange} placeholder={lang === 'es' ? 'Color Ojos' : 'Eye Color'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <input type="text" name="foto" value={addForm.foto} onChange={handleAddChange} placeholder={lang === 'es' ? 'URL Foto' : 'Photo URL'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <input type="text" name="pais" value={addForm.pais} onChange={handleAddChange} placeholder={lang === 'es' ? 'País Válido' : 'Valid Country'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
+                <input type="text" name="firma" value={addForm.firma} onChange={handleAddChange} placeholder={lang === 'es' ? 'URL Firma' : 'Signature URL'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
+                <input type="text" name="cedula" value={addForm.cedula} onChange={handleAddChange} placeholder={lang === 'es' ? 'URL Cédula/ID' : 'ID Document URL'} className="px-3 py-2 rounded-lg border border-primary-light text-sm outline-none focus:border-accent" />
                 <div className="md:col-span-3 flex gap-2">
                   <button type="submit" className="flex items-center gap-1.5 bg-accent text-white font-semibold px-4 py-2 rounded-lg hover:bg-accent-dark transition-all text-sm">
                     {addSuccess ? <><Check size={16} /> {lang === 'es' ? 'Copiado' : 'Copied'}</> : lang === 'es' ? 'Generar línea CSV' : 'Generate CSV line'}
@@ -299,18 +309,36 @@ const AdminPanel = () => {
                 </div>
               ) : null)}
             </div>
-            {selected.link && (
-              <div className="mt-4 pt-4 border-t border-primary-light">
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">LINK</span>
-                <p className="font-semibold text-primary text-sm break-all">{selected.link}</p>
-              </div>
-            )}
             {selected.fotoUrl && (
               <div className="mt-4 pt-4 border-t border-primary-light">
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">Foto URL</span>
-                <a href={selected.fotoUrl} target="_blank" rel="noopener noreferrer" className="text-accent font-semibold text-sm hover:underline flex items-center gap-1 mt-0.5">
-                  <ExternalLink size={14} /> {lang === 'es' ? 'Abrir Foto' : 'Open Photo'}
-                </a>
+                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">{lang === 'es' ? 'Foto Carnet' : 'Passport Photo'}</span>
+                <div className="mt-1 w-24 h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                  <img src={getDirectImageUrl(selected.fotoUrl)} alt="Carnet" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${selected.fotoUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver' : 'View'}</a>` }} />
+                </div>
+              </div>
+            )}
+            {selected.link && (
+              <div className="mt-4 pt-4 border-t border-primary-light">
+                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">{lang === 'es' ? 'Licencia Local' : 'Local License'}</span>
+                <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                  <img src={getDirectImageUrl(selected.link)} alt="License" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${selected.link}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver' : 'View'}</a>` }} />
+                </div>
+              </div>
+            )}
+            {selected.firmaUrl && (
+              <div className="mt-4 pt-4 border-t border-primary-light">
+                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">{t.admin.firmaLabel || 'Firma'}</span>
+                <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                  <img src={getDirectImageUrl(selected.firmaUrl)} alt="Signature" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${selected.firmaUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver' : 'View'}</a>` }} />
+                </div>
+              </div>
+            )}
+            {selected.cedulaUrl && (
+              <div className="mt-4 pt-4 border-t border-primary-light">
+                <span className="text-[10px] text-text-muted uppercase font-bold tracking-widest">{t.admin.cedulaLabel || 'Cédula'}</span>
+                <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                  <img src={getDirectImageUrl(selected.cedulaUrl)} alt="ID" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${selected.cedulaUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver' : 'View'}</a>` }} />
+                </div>
               </div>
             )}
           </div>

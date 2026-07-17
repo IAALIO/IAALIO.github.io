@@ -74,6 +74,9 @@ export const translations = {
       eyeColor: 'Color Ojos',
       validCountry: 'País Válido',
       linkLabel: 'Documento Relacionado',
+      firmaLabel: 'Firma',
+      cedulaLabel: 'Cédula / ID',
+      licenciaLabel: 'Licencia Local',
       viewPhoto: 'Ver Foto Original',
       photoLabel: 'Foto del Titular',
       footer: 'Documento oficial verificado electrónicamente por LIO'
@@ -98,7 +101,8 @@ export const translations = {
       status: 'Estado', totalLicenses: 'Total Licencias',
       active: 'Activas', expired: 'Vencidas',
       fileLabel: 'Archivo PDF', publish: 'Publicar',
-      success: 'Guardado exitoso', error: 'Error al guardar'
+      success: 'Guardado exitoso', error: 'Error al guardar',
+      firmaLabel: 'Firma', cedulaLabel: 'Cédula / ID'
     },
     faq: {
       title: 'Preguntas Frecuentes',
@@ -241,6 +245,9 @@ export const translations = {
       eyeColor: 'Eye Color',
       validCountry: 'Valid Country',
       linkLabel: 'Related Document',
+      firmaLabel: 'Signature',
+      cedulaLabel: 'ID Document',
+      licenciaLabel: 'Local License',
       viewPhoto: 'View Original Photo',
       photoLabel: 'Holder Photo',
       footer: 'Electronically verified official document issued by LIO'
@@ -265,7 +272,8 @@ export const translations = {
       status: 'Status', totalLicenses: 'Total Licenses',
       active: 'Active', expired: 'Expired',
       fileLabel: 'PDF File', publish: 'Publish',
-      success: 'Saved successfully', error: 'Error saving'
+      success: 'Saved successfully', error: 'Error saving',
+      firmaLabel: 'Signature', cedulaLabel: 'ID Document'
     },
     faq: {
       title: 'Frequently Asked Questions',

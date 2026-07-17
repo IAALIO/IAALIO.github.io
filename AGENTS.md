@@ -99,6 +99,26 @@ lio-new/
 ### Nota
 El AdminPanel es independiente del formulario de solicitudes. El formulario envía datos al Apps Script (Sheet de solicitudes + Drive), mientras que el AdminPanel consulta un CSV de licencias ya emitidas.
 
+### Columnas del CSV (licencias emitidas)
+| # | Columna | Descripción |
+|---|---------|-------------|
+| 0 | Documento | N° de documento |
+| 1 | ID Tramite | ID del trámite |
+| 2 | Nombre | Nombre completo |
+| 3 | Vencimiento | Fecha de vencimiento |
+| 4 | Estado | ACTIVA / EXPIRADA |
+| 5 | Categoria | Categoría de licencia |
+| 6 | LINK | URL foto licencia local |
+| 7 | Fecha Nac | Fecha de nacimiento |
+| 8 | Nacionalidad | Nacionalidad |
+| 9 | Estatura | Altura en cm |
+| 10 | Sangre | Tipo de sangre |
+| 11 | Ojos | Color de ojos |
+| 12 | Foto URL | URL foto carnet |
+| 13 | Pais Valido | País de validez |
+| 14 | Firma | URL foto firma |
+| 15 | Cedula | URL foto cédula/ID |
+
 ## PDF (SearchLicense.jsx)
 - jsPDF v4.2.1
 - Watermark IAA al centro (opacidad 15%)

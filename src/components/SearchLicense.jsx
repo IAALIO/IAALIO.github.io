@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, Loader2, CheckCircle2, XCircle, Download, ExternalLink } from 'lucide-react'
+import { Search, Loader2, CheckCircle2, XCircle, Download } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../App'
 import { jsPDF, GState } from 'jspdf'
@@ -60,12 +60,18 @@ const SearchLicense = () => {
         setResult({
           id: row[0], id_tramite: row[1], nombre: row[2],
           validoHasta: row[3], estado: row[4], tipo: row[5],
-          link: row[6] || '', fechaNacimiento: row[7] || '',
+          link: getDirectImageUrl(row[6] || ''),
+          linkOriginal: getGDriveFileUrl(row[6] || ''),
+          fechaNacimiento: row[7] || '',
           nacionalidad: row[8] || '', estatura: row[9] || '',
           tipoSangre: row[10] || '', colorOjos: row[11] || '',
           fotoUrl: getDirectImageUrl(row[12] || ''),
           fotoOriginal: getGDriveFileUrl(row[12] || ''),
           paisValido: row[13] || '',
+          firmaUrl: getDirectImageUrl(row[14] || ''),
+          firmaOriginal: getGDriveFileUrl(row[14] || ''),
+          cedulaUrl: getDirectImageUrl(row[15] || ''),
+          cedulaOriginal: getGDriveFileUrl(row[15] || ''),
         })
         setStatus('found')
       } else setStatus('not_found')
@@ -153,6 +159,40 @@ const SearchLicense = () => {
       }
 
       y = Math.max(y, fotoY + 48 + 6) + 2
+
+      if (result.link || result.firmaUrl || result.cedulaUrl) {
+        doc.setDrawColor(200); doc.setLineWidth(0.3)
+        doc.line(20, y, pw - 20, y); y += 8
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9)
+        doc.text(es ? 'DOCUMENTOS ADJUNTOS' : 'ATTACHED DOCUMENTS', pw / 2, y, { align: 'center' }); y += 6
+
+        const thumbW = 45; const thumbH = 32; const thumbGap = 5
+        const docs = [
+          { url: result.link, label: es ? 'Licencia Local' : 'Local License' },
+          { url: result.firmaUrl, label: es ? 'Firma' : 'Signature' },
+          { url: result.cedulaUrl, label: es ? 'Cédula / ID' : 'ID Document' },
+        ].filter(d => d.url)
+        const totalDocsW = docs.length * thumbW + (docs.length - 1) * thumbGap
+        let dx = (pw - totalDocsW) / 2
+
+        for (const docItem of docs) {
+          try {
+            const resp = await fetch(docItem.url, { mode: 'cors' })
+            const blob = await resp.blob()
+            const b64 = await new Promise(resolve => {
+              const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob)
+            })
+            const ext = blob.type === 'image/jpeg' ? 'JPEG' : 'PNG'
+            doc.addImage(b64, ext, dx, y, thumbW, thumbH)
+            doc.setDrawColor(200); doc.setLineWidth(0.3)
+            doc.rect(dx, y, thumbW, thumbH)
+            doc.setFont('helvetica', 'italic'); doc.setFontSize(6)
+            doc.text(docItem.label, dx + thumbW / 2, y + thumbH + 4, { align: 'center' })
+          } catch {}
+          dx += thumbW + thumbGap
+        }
+        y += thumbH + 10
+      }
 
       doc.setDrawColor(200); doc.setLineWidth(0.3)
       doc.line(20, y, pw - 20, y); y += 8
@@ -271,8 +311,8 @@ const SearchLicense = () => {
                   <div className="flex flex-col sm:flex-row gap-4">
                     {result.fotoUrl && (
                       <div className="shrink-0 flex justify-center sm:block">
-                        <div className="w-full sm:w-52 sm:h-52 rounded-xl border-2 border-primary-light overflow-hidden bg-white shadow-sm">
-                          <img src={result.fotoUrl} alt="Holder" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.fotoOriginal || result.fotoUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Foto' : 'View Photo'}</a>` }} />
+                        <div className="w-36 h-44 rounded-xl border-2 border-primary-light overflow-hidden bg-white shadow-sm">
+                          <img src={result.fotoUrl} alt="Holder" className="w-full h-full object-contain bg-gray-50" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.fotoOriginal || result.fotoUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Foto' : 'View Photo'}</a>` }} />
                         </div>
                       </div>
                     )}
@@ -327,19 +367,32 @@ const SearchLicense = () => {
                     </div>
                   </div>
 
-                  {result.link && (
-                    <div className="mt-3 pt-3 border-t border-primary-light">
-                      <div className="mt-1">
-                        {isUrl(result.link) ? (
-                          <a href={result.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-accent font-semibold text-sm hover:underline">
-                            <ExternalLink size={14} /> {lang === 'es' ? 'Abrir Documento' : 'Open Document'}
-                          </a>
-                        ) : (
-                          <span className="text-primary font-semibold text-sm break-words">{result.link}</span>
-                        )}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-primary-light">
+                    {result.link && (
+                      <div>
+                        <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.licenciaLabel}</span>
+                        <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                          <img src={result.link} alt="License" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.linkOriginal || result.link}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Documento' : 'View Document'}</a>` }} />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {result.firmaUrl && (
+                      <div>
+                        <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.firmaLabel}</span>
+                        <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                          <img src={result.firmaUrl} alt="Signature" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.firmaOriginal || result.firmaUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Firma' : 'View Signature'}</a>` }} />
+                        </div>
+                      </div>
+                    )}
+                    {result.cedulaUrl && (
+                      <div>
+                        <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.cedulaLabel}</span>
+                        <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
+                          <img src={result.cedulaUrl} alt="ID" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.cedulaOriginal || result.cedulaUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Cédula' : 'View ID'}</a>` }} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   <div className="mt-4 pt-3 border-t border-primary-light flex flex-col sm:flex-row justify-between items-center gap-3">
                     <p className="text-[9px] text-text-muted italic text-center sm:text-left">{t.search.footer}</p>
