@@ -8,7 +8,9 @@
 
 ## Credenciales
 - **GitHub Token:** `ghp_xxxx` (classic, repo + workflow scope — saved in AGENTS.md local)
-- **Google Apps Script URL:** `https://script.google.com/macros/s/AKfycbwCOqCJuDGzvfzlb7iBdLccCDWcMtXB0MNPo2Gekr4n1VAE75iBsY2nvjCylPz2jqCi/exec`
+- **Google Apps Script URL:** `https://script.google.com/macros/s/AKfycbx0BP-n-yHe2PGEGjmpQRKdm72VdQ-Yo095qMCnIPP7T5xoSs4AW6ki4XVaHUwcW_-X/exec`
+- **Drive Folder ID (IAA-Licencias):** `1sAgajm3yoK2g0Y5w9a1ZqbnJGcWqWcac`
+- **Google Sheet ID (IAA-Solicitudes):** `19tfesoT1l-k9ee2d9R2u-qmUUGNlkrQ-soPcltI21QI`
 - **VITE_ADMIN_PASSWORD:** `LIO-ADMIN-2024`
 - **Google Sheets CSV (público):** `https://docs.google.com/spreadsheets/d/e/2PACX-1vQcLOEKNE8N8-dRiH9ZhFxxbpK59mSE8gc-Of1wya6QH6HuOQvs1l6pFnxM35HoUhUsOCI12p03n5YY/pub?output=csv`
 
@@ -79,10 +81,10 @@ lio-new/
 
 ## Formulario (ApplicationForm.jsx)
 - 4 pasos: datos personales, físicos, fotos, contacto
-- Envío: Convierte fotos a base64, envía JSON a `VITE_FORM_API`
-- **PENDIENTE:** Desplegar Google Apps Script (AppsScript.gs)
+- Envío: Convierte fotos a base64, envía JSON a `VITE_FORM_API` con `mode: 'no-cors'` (CORS fix)
 - **AppsScript.gs:** Recibe JSON, guarda en Google Sheet, sube fotos a Drive, envía email
-- **Config:** `VITE_FORM_API` debe apuntar a la URL del script desplegado
+- Email envuelto en try-catch (falla silenciosamente si no hay sesión activa)
+- **Proyecto Apps Script:** IAA-Form-API-v2 (script.google.com)
 
 ## Estado Actual (Completado)
 - [x] Paleta azul+blanco+rojo (latinolicencias.com)
@@ -99,9 +101,14 @@ lio-new/
 - [x] 404.html para SPA routing
 - [x] Favicon IAA
 - [x] Title "IAA - License International Official"
+- [x] Google Apps Script desplegado (v2) con Drive/Sheet/email
+- [x] CORS solucionado (no-cors mode en fetch)
+- [x] Token GitHub renovado y funcional
 
 ## Pendiente
-- [x] **Desplegar Google Apps Script** (crear script, pegar AppsScript.gs, autorizar, desplegar como web app, poner URL en VITE_FORM_API)
+- [ ] **Pegar código final en IAA-Form-API-v2 y desplegar** (AppsScript.gs en unblock.txt)
+- [ ] **Autorizar doPost y doGet** desde el editor de script.google.com
+- [ ] **Probar formulario** en https://IAALIO.github.io (esperar deploy de GitHub Actions)
 - [ ] Revisar PDF: asegurar que foto y watermark se vean bien
 - [ ] Dominio propio (opcional, ~$10/año)
 - [ ] Probar que la consulta de licencias funciona (depende del CSV de Google Sheets)
