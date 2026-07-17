@@ -51,8 +51,8 @@ export const translations = {
       title: 'Solicitud de Licencia',
       subtitle: 'Completa el formulario para iniciar tu trámite internacional.',
       steps: ['Personal', 'Físicos', 'Fotos', 'Contacto'],
-      step1: { title: 'Información Personal', nombre: 'Nombre Completo', nombrePlaceholder: 'Ej. Juan Pérez', paisNac: 'País de Nacimiento', paisNacPlaceholder: 'Ej. Colombia', fechaNac: 'Fecha de Nacimiento', paisRes: 'País de Residencia', paisResPlaceholder: 'Ej. España', vigencia: 'Vigencia Deseada' },
-      step2: { title: 'Detalles Físicos', estatura: 'Estatura (cm)', estaturaPlaceholder: 'Ej. 175', sangre: 'Tipo de Sangre', ojos: 'Color de Ojos', ojosPlaceholder: 'Ej. Café' },
+      step1: { title: 'Información Personal', nombre: 'Nombre Completo', nombrePlaceholder: 'Nombre y apellido (ej: Juan Pérez)', paisNac: 'País de Nacimiento', paisNacPlaceholder: 'País donde nació (ej: Colombia)', fechaNac: 'Fecha de Nacimiento', fechaNacPlaceholder: 'DD/MM/AAAA', paisRes: 'País de Residencia', paisResPlaceholder: 'País donde vive actualmente (ej: España)', vigencia: 'Vigencia Deseada' },
+      step2: { title: 'Detalles Físicos', estatura: 'Estatura (cm)', estaturaPlaceholder: 'Altura en centímetros (ej: 175)', sangre: 'Tipo de Sangre', ojos: 'Color de Ojos', ojosPlaceholder: 'Color de ojos (ej: Café, Azul, Verde)' },
       step3: { title: 'Documentación (Fotos)', desc: 'Obligatorio: Suba las 4 fotos requeridas.', carnet: 'Foto Tipo Carnet', firma: 'Foto de la Firma', idDoc: 'Pasaporte / Cédula', licencia: 'Licencia de Conducir Local' },
       step4: { title: 'Contacto Final', email: 'Correo Electrónico', emailPlaceholder: 'correo@ejemplo.com', telefono: 'Número de Teléfono', telefonoPlaceholder: '+51 999 999 999', terms: 'Al enviar, acepta nuestros términos y condiciones y el procesamiento de sus datos para la emisión de la licencia internacional.' },
       next: 'Siguiente', prev: 'Anterior', submit: 'Enviar Solicitud', sending: 'Enviando...', alertStep: 'Complete todos los campos obligatorios.', alertEmail: 'Complete su Correo y Teléfono.'
@@ -218,8 +218,8 @@ export const translations = {
       title: 'License Application',
       subtitle: 'Complete the form to start your international process.',
       steps: ['Personal', 'Physical', 'Photos', 'Contact'],
-      step1: { title: 'Personal Information', nombre: 'Full Name', nombrePlaceholder: 'e.g. John Doe', paisNac: 'Country of Birth', paisNacPlaceholder: 'e.g. USA', fechaNac: 'Date of Birth', paisRes: 'Country of Residence', paisResPlaceholder: 'e.g. Spain', vigencia: 'Desired Validity' },
-      step2: { title: 'Physical Details', estatura: 'Height (cm)', estaturaPlaceholder: 'e.g. 175', sangre: 'Blood Type', ojos: 'Eye Color', ojosPlaceholder: 'e.g. Brown' },
+      step1: { title: 'Personal Information', nombre: 'Full Name', nombrePlaceholder: 'Full name (e.g. John Doe)', paisNac: 'Country of Birth', paisNacPlaceholder: 'Country of birth (e.g. USA)', fechaNac: 'Date of Birth', fechaNacPlaceholder: 'DD/MM/YYYY', paisRes: 'Country of Residence', paisResPlaceholder: 'Current country of residence (e.g. Spain)', vigencia: 'Desired Validity' },
+      step2: { title: 'Physical Details', estatura: 'Height (cm)', estaturaPlaceholder: 'Height in cm (e.g. 175)', sangre: 'Blood Type', ojos: 'Eye Color', ojosPlaceholder: 'Eye color (e.g. Brown, Blue, Green)' },
       step3: { title: 'Photos', desc: 'Required: Upload all 4 photos.', carnet: 'Passport Photo', firma: 'Signature Photo', idDoc: 'Passport / ID', licencia: 'Local License' },
       step4: { title: 'Final Contact', email: 'Email', emailPlaceholder: 'email@example.com', telefono: 'Phone', telefonoPlaceholder: '+1 555 555 5555', terms: 'By submitting, you agree to our terms and data processing for license issuance.' },
       next: 'Next', prev: 'Previous', submit: 'Submit Application', sending: 'Sending...', alertStep: 'Fill in all required fields.', alertEmail: 'Complete Email and Phone.'
