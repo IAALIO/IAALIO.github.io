@@ -14,6 +14,8 @@ function doPost(e) {
 
     const idTramite = 'LIC-' + Utilities.formatDate(new Date(), 'GMT-4', 'yyyyMMdd-HHmmss')
 
+    const applicantFolder = folder.createFolder(idTramite)
+
     function saveBase64File(b64, nombreArchivo) {
       if (!b64) return ''
       try {
@@ -21,7 +23,7 @@ function doPost(e) {
         const mime = parts[0].match(/:(.*?);/)[1]
         const ext = mime.split('/')[1] === 'jpeg' ? 'jpg' : mime.split('/')[1]
         const blob = Utilities.newBlob(Utilities.base64Decode(parts[1]), mime, nombreArchivo + '.' + ext)
-        const file = folder.createFile(blob)
+        const file = applicantFolder.createFile(blob)
         return file.getUrl()
       } catch (er) { return '' }
     }
@@ -38,7 +40,7 @@ function doPost(e) {
 
     try {
       MailApp.sendEmail({
-        to: Session.getActiveUser().getEmail(),
+        to: 'license.international.official@gmail.com',
         subject: 'Nueva solicitud IAA - ' + data.nombreCompleto,
         body: [
           'Nueva solicitud de permiso internacional:',
