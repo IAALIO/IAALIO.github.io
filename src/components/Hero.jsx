@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, Award, ChevronDown } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Award, ChevronDown, Mail, MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useLang } from '../App'
 import unLogo from '../assets/images/un-logo.png'
@@ -34,6 +34,14 @@ const Hero = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16">
+        <div className="flex justify-end gap-3 mb-4 -mt-8">
+          <a href="https://wa.me/584244296940" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-white/50 hover:text-white text-[10px] font-medium transition-colors border border-white/10 hover:border-white/25 rounded-full px-3 py-1">
+            <MessageCircle size={12} /> WhatsApp
+          </a>
+          <a href="mailto:license.international.official@gmail.com" className="flex items-center gap-1.5 text-white/50 hover:text-white text-[10px] font-medium transition-colors border border-white/10 hover:border-white/25 rounded-full px-3 py-1">
+            <Mail size={12} /> Email
+          </a>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5 mb-5">

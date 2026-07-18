@@ -61,7 +61,6 @@ function App() {
           <FAQ />
         </main>
         <Footer />
-        <WhatsAppButton />
         <StickyMobileCTA />
       </div>
     </LangContext.Provider>
