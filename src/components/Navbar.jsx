@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Menu, X, Globe } from 'lucide-react'
+import { Menu, X, Globe, MessageCircle, Mail } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../App'
 import iaaLogo from '../assets/images/iaa-logo.png'
@@ -44,6 +44,12 @@ const Navbar = () => {
             <Globe size={14} />
             {lang === 'es' ? 'EN' : 'ES'}
           </button>
+          <a href="https://wa.me/584244296940" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="WhatsApp">
+            <MessageCircle size={16} />
+          </a>
+          <a href="mailto:license.international.official@gmail.com" className="text-white/40 hover:text-white transition-colors" aria-label="Email">
+            <Mail size={16} />
+          </a>
           <a href="#tramite" className="font-semibold text-sm px-5 py-2.5 rounded-lg bg-accent text-white hover:bg-accent-dark transition-all shadow-sm">
             {t.nav.tramite}
           </a>
@@ -74,6 +80,14 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
+              <div className="flex items-center gap-4 pt-2">
+                <a href="https://wa.me/584244296940" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors" aria-label="WhatsApp">
+                  <MessageCircle size={18} />
+                </a>
+                <a href="mailto:license.international.official@gmail.com" className="text-white/50 hover:text-white transition-colors" aria-label="Email">
+                  <Mail size={18} />
+                </a>
+              </div>
               <a href="#tramite" className="bg-accent text-white font-semibold px-8 py-3 rounded-lg text-sm shadow-sm w-full text-center" onClick={() => setIsMobileMenuOpen(false)}>
                 {t.nav.tramite}
               </a>
