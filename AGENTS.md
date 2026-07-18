@@ -195,6 +195,8 @@ lio-new/
 - [x] "100% Legal" reemplazado por "Avalado / Endorsed"
 - [x] Checkbox simplificado: solo "Acepto Términos y Condiciones"
 - [x] Contactos WhatsApp/Email en Navbar (iconos, sin flotante)
+- [x] Firma removida de la tarjeta visual de resultados (solo en PDF)
+- [x] Cards Licencia + Cédula centradas en escritorio (flex row) y móvil (flex col)
 
 ### Pendiente
 - [ ] Dominio propio (opcional, ~$10/año)
