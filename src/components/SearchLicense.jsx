@@ -420,14 +420,6 @@ const SearchLicense = () => {
                         </div>
                       </div>
                     )}
-                    {result.firmaUrl && (
-                      <div>
-                        <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.firmaLabel}</span>
-                        <div className="mt-1 w-full h-28 rounded-lg border border-primary-light overflow-hidden bg-gray-50">
-                          <img src={result.firmaUrl} alt="Signature" className="w-full h-full object-contain" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML=`<a href=\"${result.firmaOriginal || result.firmaUrl}\" target=\"_blank\" class=\"w-full h-full flex items-center justify-center text-accent text-[10px] font-semibold hover:underline\">${lang === 'es' ? 'Ver Firma' : 'View Signature'}</a>` }} />
-                        </div>
-                      </div>
-                    )}
                     {result.cedulaUrl && (
                       <div>
                         <span className="text-[9px] text-text-muted uppercase font-bold tracking-widest">{t.search.cedulaLabel}</span>
