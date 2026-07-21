@@ -14,7 +14,14 @@ function jsonp(url) {
     const cb = 'lic_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)
     const separator = url.includes('?') ? '&' : '?'
     const fullUrl = url + separator + 'callback=' + cb
+    const timer = setTimeout(() => {
+      delete window[cb]
+      const script = document.querySelector(`script[data-jsonp="${cb}"]`)
+      if (script) script.remove()
+      reject(new Error('JSONP timeout'))
+    }, 10000)
     window[cb] = (data) => {
+      clearTimeout(timer)
       delete window[cb]
       const script = document.querySelector(`script[data-jsonp="${cb}"]`)
       if (script) script.remove()
@@ -23,7 +30,7 @@ function jsonp(url) {
     const s = document.createElement('script')
     s.dataset.jsonp = cb
     s.src = fullUrl
-    s.onerror = () => { delete window[cb]; s.remove(); reject(new Error('JSONP load failed')) }
+    s.onerror = () => { clearTimeout(timer); delete window[cb]; s.remove(); reject(new Error('JSONP load failed')) }
     document.body.appendChild(s)
   })
 }
@@ -65,7 +72,6 @@ const SearchLicense = () => {
         String(r.documento) === q ||
         String(r.id_tramite).toLowerCase() === ql ||
         String(r.id_tramite).toLowerCase().includes(ql) ||
-        String(r.nombre).toLowerCase().includes(ql) ||
         String(r.documento).includes(q)
       )
       if (found) {
