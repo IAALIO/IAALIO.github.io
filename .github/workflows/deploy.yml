@@ -22,11 +22,6 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - name: Fetch license data snapshot
-        run: |
-          mkdir -p public/data
-          curl -sL 'https://script.google.com/macros/s/AKfycbx0gQ3CD231T3oX69LQ7PJ-JdC7KB4fx0LUKoOdyMiJ93rcwV60gf31mAikekc0vj--/exec?action=licencias' \
-            -o public/data/licencias.json
       - run: npm run build
         env:
           VITE_FORM_API: https://script.google.com/macros/s/AKfycbx0gQ3CD231T3oX69LQ7PJ-JdC7KB4fx0LUKoOdyMiJ93rcwV60gf31mAikekc0vj--/exec

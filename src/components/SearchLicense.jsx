@@ -31,9 +31,18 @@ const SearchLicense = () => {
   const [status, setStatus] = useState('idle')
   const [result, setResult] = useState(null)
 
-  async function fetchData() {
-    const r = await fetch('./data/licencias.json')
-    return r.json()
+  const fetchLicenciasJSONP = () => {
+    return new Promise((resolve, reject) => {
+      const apiUrl = FORM_API
+      if (!apiUrl) return reject(new Error('no api'))
+      const cb = 'jcb_' + Date.now()
+      const s = document.createElement('script')
+      s.src = apiUrl + '?action=licencias&callback=' + cb
+      window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
+      s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
+      document.body.appendChild(s)
+      setTimeout(() => { if (window[cb]) { delete window[cb]; document.body.removeChild(s); reject(new Error('timeout')) } }, 8000)
+    })
   }
 
   const handleSearch = async (e) => {
@@ -43,21 +52,16 @@ const SearchLicense = () => {
     try {
       let result
       try {
-        result = await fetchData()
+        result = await fetchLicenciasJSONP()
       } catch {
-        const apiUrl = FORM_API || ''
-        if (!apiUrl) throw new Error('no api')
-        const res = await fetch(apiUrl + '?action=licencias')
-        result = await res.json()
+        const r = await fetch('./data/licencias.json')
+        result = await r.json()
       }
       if (!result.ok || !result.data) { setStatus('not_found'); return }
       const q = docId.trim()
-      const ql = q.toLowerCase()
       const found = result.data.find(r =>
         String(r.documento) === q ||
-        String(r.id_tramite).toLowerCase() === ql ||
-        String(r.id_tramite).toLowerCase().includes(ql) ||
-        String(r.documento).includes(q)
+        String(r.id_tramite) === q
       )
       if (found) {
         setResult({

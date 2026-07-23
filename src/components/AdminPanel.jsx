@@ -24,6 +24,19 @@ const AdminPanel = () => {
   const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '', firma: '', cedula: '' })
   const [addSuccess, setAddSuccess] = useState(false)
 
+  const fetchLicenciasJSONP = () => {
+    return new Promise((resolve, reject) => {
+      if (!FORM_API) return reject(new Error('no api'))
+      const cb = 'ajcb_' + Date.now()
+      const s = document.createElement('script')
+      s.src = FORM_API + '?action=licencias&callback=' + cb
+      window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
+      s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
+      document.body.appendChild(s)
+      setTimeout(() => { if (window[cb]) { delete window[cb]; document.body.removeChild(s); reject(new Error('timeout')) } }, 8000)
+    })
+  }
+
   useEffect(() => {
     if (isLoggedIn) fetchLicenses()
   }, [isLoggedIn])
@@ -33,11 +46,10 @@ const AdminPanel = () => {
     try {
       let result
       try {
-        const r = await fetch('./data/licencias.json')
-        result = await r.json()
+        result = await fetchLicenciasJSONP()
       } catch {
         if (!FORM_API) { setLicenses([]); setLoading(false); return }
-        const r = await fetch(FORM_API + '?action=licencias')
+        const r = await fetch('./data/licencias.json')
         result = await r.json()
       }
       if (result.ok && result.data) {
@@ -71,11 +83,11 @@ const AdminPanel = () => {
     else setError(t.admin.wrongPwd)
   }
 
-  const filtered = licenses.filter(l =>
-    l.nombre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    l.id?.includes(searchQuery) ||
-    l.id_tramite?.includes(searchQuery)
-  )
+  const q = searchQuery.trim()
+  const filtered = q ? licenses.filter(l =>
+    String(l.id) === q ||
+    String(l.id_tramite) === q
+  ) : licenses
 
   const stats = {
     total: licenses.length,

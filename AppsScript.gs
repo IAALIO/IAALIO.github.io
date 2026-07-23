@@ -19,7 +19,7 @@ function serveJSONP(callback, data) {
 }
 
 function getLicencias() {
-  const sheet = SpreadsheetApp.openById('19tfesoT1l-k9ee2d9R2u-qmUUGNlkrQ-soPcltI21QI')
+  const sheet = SpreadsheetApp.openById('1FIknMQNr2bRt9yCc1R-pawcTxhqBkY0WkeyIuHlhnfo')
   const ws = sheet.getSheetByName('Licencias')
   if (!ws) return { ok: true, data: [] }
   const rows = ws.getDataRange().getValues()
@@ -52,7 +52,7 @@ function getLicencias() {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents)
-    const sheet = SpreadsheetApp.openById('19tfesoT1l-k9ee2d9R2u-qmUUGNlkrQ-soPcltI21QI')
+    const sheet = SpreadsheetApp.openById('1FIknMQNr2bRt9yCc1R-pawcTxhqBkY0WkeyIuHlhnfo')
 
     if (data.action === 'add-license') {
       const ws = sheet.getSheetByName('Licencias') || sheet.insertSheet('Licencias')
