@@ -35,9 +35,10 @@ const Pricing = () => {
                 )}
                 <div className="p-5 sm:p-6 flex flex-col flex-1">
                   <h3 className="text-lg font-bold text-primary mb-1">{plan.title}</h3>
-                  <div className="flex items-baseline gap-1 mb-3">
-                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-text-muted text-sm">USD</span>
+                  <div className="mb-3">
+                    <a href="#tramite" className="inline-block text-sm font-bold text-accent underline underline-offset-4 hover:text-accent-dark transition-colors">
+                      {t.pricing.consultPrice}
+                    </a>
                   </div>
                   <p className="text-sm text-text-muted mb-5">{plan.desc}</p>
                   <div className="space-y-2.5 mb-6 flex-1">

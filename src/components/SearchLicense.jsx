@@ -37,7 +37,7 @@ const SearchLicense = () => {
       if (!apiUrl) return reject(new Error('no api'))
       const cb = 'jcb_' + Date.now()
       const s = document.createElement('script')
-      s.src = apiUrl + '?action=licencias&callback=' + cb
+      s.src = apiUrl + '?action=licencias&callback=' + cb + '&_=' + Date.now()
       window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
       s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
       document.body.appendChild(s)
@@ -46,7 +46,7 @@ const SearchLicense = () => {
   }
 
   const handleSearch = async (e) => {
-    e.preventDefault()
+    if (e?.preventDefault) e.preventDefault()
     if (!docId) return
     setStatus('loading')
     try {
@@ -54,8 +54,12 @@ const SearchLicense = () => {
       try {
         result = await fetchLicenciasJSONP()
       } catch {
-        const r = await fetch('./data/licencias.json')
-        result = await r.json()
+        try {
+          result = await fetchLicenciasJSONP()
+        } catch {
+          setStatus('error')
+          return
+        }
       }
       if (!result.ok || !result.data) { setStatus('not_found'); return }
       const q = docId.trim()
@@ -446,6 +450,17 @@ const SearchLicense = () => {
                     </button>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {status === 'error' && (
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="p-8 border-t border-primary-light text-center">
+                <div className="inline-flex bg-orange-50 text-orange-600 p-3 rounded-full mb-4">
+                  <Loader2 className="animate-spin" size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-primary mb-2">{lang === 'es' ? 'Error de Conexión' : 'Connection Error'}</h3>
+                <p className="text-sm text-text-muted mb-4">{lang === 'es' ? 'No se pudo contactar el servicio de verificación. Inténtalo de nuevo en unos segundos.' : 'Could not reach the verification service. Please try again in a few seconds.'}</p>
+                <button onClick={() => handleSearch()} className="btn-primary text-sm px-5 py-2.5">{lang === 'es' ? 'Reintentar' : 'Retry'}</button>
               </motion.div>
             )}
 

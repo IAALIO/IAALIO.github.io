@@ -18,6 +18,7 @@ const AdminPanel = () => {
   const [error, setError] = useState('')
   const [licenses, setLicenses] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selected, setSelected] = useState(null)
   const [showAddForm, setShowAddForm] = useState(false)
@@ -29,7 +30,7 @@ const AdminPanel = () => {
       if (!FORM_API) return reject(new Error('no api'))
       const cb = 'ajcb_' + Date.now()
       const s = document.createElement('script')
-      s.src = FORM_API + '?action=licencias&callback=' + cb
+      s.src = FORM_API + '?action=licencias&callback=' + cb + '&_=' + Date.now()
       window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
       s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
       document.body.appendChild(s)
@@ -43,14 +44,20 @@ const AdminPanel = () => {
 
   const fetchLicenses = async () => {
     setLoading(true)
+    setLoadError(false)
     try {
       let result
       try {
         result = await fetchLicenciasJSONP()
       } catch {
-        if (!FORM_API) { setLicenses([]); setLoading(false); return }
-        const r = await fetch('./data/licencias.json')
-        result = await r.json()
+        try {
+          result = await fetchLicenciasJSONP()
+        } catch {
+          setLicenses([])
+          setLoadError(true)
+          setLoading(false)
+          return
+        }
       }
       if (result.ok && result.data) {
         setLicenses(result.data.map(r => ({
@@ -262,6 +269,13 @@ const AdminPanel = () => {
 
           {loading ? (
             <div className="p-10 text-center text-text-muted text-sm">{lang === 'es' ? 'Cargando...' : 'Loading...'}</div>
+          ) : loadError ? (
+            <div className="p-10 text-center">
+              <p className="text-sm text-text-muted mb-4">{lang === 'es' ? 'No se pudo contactar el servicio. Verifica la conexión e inténtalo de nuevo.' : 'Could not reach the service. Check your connection and try again.'}</p>
+              <button onClick={fetchLicenses} className="flex items-center gap-1.5 mx-auto text-accent text-sm font-semibold hover:underline">
+                <RefreshCw size={14} /> {lang === 'es' ? 'Reintentar' : 'Retry'}
+              </button>
+            </div>
           ) : filtered.length === 0 ? (
             <div className="p-10 text-center text-text-muted text-sm">{lang === 'es' ? 'Sin resultados' : 'No results'}</div>
           ) : (

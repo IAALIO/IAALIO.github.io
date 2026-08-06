@@ -14,7 +14,7 @@ const StickyMobileCTA = () => {
               <span className="text-accent font-bold text-[9px]">LIO</span>
             </div>
             <div>
-              <p className="font-bold text-primary text-[10px] leading-tight">{t.pricing.plans[0].price} USD</p>
+              <p className="font-bold text-primary text-[10px] leading-tight">{t.pricing.consultPrice}</p>
               <p className="text-[8px] text-text-muted leading-tight">{t.sticky.text}</p>
             </div>
           </div>

@@ -26,10 +26,11 @@ export const translations = {
       subtitle: 'Elige el plan que mejor se adapte a tus necesidades de viaje.',
       recommended: 'MÁS POPULAR',
       select: 'Aplicar',
+      consultPrice: 'Consultar Precio',
       plans: [
-        { title: '1 Año', price: '$70', desc: 'Perfecto para viajes cortos.', features: ['Documento Digital + Físico', 'Válido en 160+ países', 'Soporte 24/7', 'Envío courier incluido', 'Traducido a 9 idiomas'] },
-        { title: '2 Años', price: '$100', desc: 'La opción favorita de nuestros usuarios.', features: ['Todo lo del plan 1 año', 'Envío prioritario', 'Descuento en renovación', 'Asesoría legal básica', 'Código QR de verificación'] },
-        { title: '5 Años', price: '$150', desc: 'Tranquilidad a largo plazo.', features: ['Todo lo del plan 2 años', 'Reposición gratuita', 'Vigencia extendida', 'Soporte VIP prioritario', 'Verificación internacional'] }
+        { title: '1 Año', desc: 'Perfecto para viajes cortos.', features: ['Documento Digital + Físico', 'Válido en 160+ países', 'Soporte 24/7', 'Envío courier incluido', 'Traducido a 9 idiomas'] },
+        { title: '2 Años', desc: 'La opción favorita de nuestros usuarios.', features: ['Todo lo del plan 1 año', 'Envío prioritario', 'Descuento en renovación', 'Asesoría legal básica', 'Código QR de verificación'] },
+        { title: '5 Años', desc: 'Tranquilidad a largo plazo.', features: ['Todo lo del plan 2 años', 'Reposición gratuita', 'Vigencia extendida', 'Soporte VIP prioritario', 'Verificación internacional'] }
       ]
     },
     requirements: {
@@ -125,7 +126,7 @@ export const translations = {
         { name: 'María G.', country: 'Argentina', rating: 5, text: 'Muy profesional. Me ayudaron con la documentación y el proceso fue súper rápido.' },
         { name: 'John D.', country: 'USA', rating: 5, text: 'Smooth process. Got my digital permit in 24 hours. Physical copy arrived 3 days later.' },
         { name: 'Laura P.', country: 'España', rating: 5, text: 'Lo usé en mi viaje por Europa y funcionó perfecto en todos los países.' },
-        { name: 'Pedro R.', country: 'Colombia', rating: 5, text: 'El mejor precio que encontré. Atención personalizada y todo muy claro.' },
+        { name: 'Pedro R.', country: 'Colombia', rating: 5, text: 'Excelente servicio y atención personalizada. Todo muy claro.' },
         { name: 'Ana L.', country: 'Chile', rating: 5, text: 'Pensé que era complicado pero fue re fácil. En 3 pasos ya tenía mi licencia.' },
       ]
     },
@@ -197,10 +198,11 @@ export const translations = {
       subtitle: 'Choose the plan that fits your travel needs.',
       recommended: 'MOST POPULAR',
       select: 'Buy Now',
+      consultPrice: 'Check Price',
       plans: [
-        { title: '1 Year', price: '$70', desc: 'Perfect for short trips.', features: ['Digital + Physical Document', 'Valid in 160+ countries', '24/7 Support', 'Courier delivery included', 'Translated into 9 languages'] },
-        { title: '2 Years', price: '$100', desc: 'Our users\' favorite choice.', features: ['Everything in 1 year plan', 'Priority shipping', 'Renewal discount', 'Basic legal advice', 'QR verification code'] },
-        { title: '5 Years', price: '$150', desc: 'Long-term peace of mind.', features: ['Everything in 2 year plan', 'Free replacement', 'Extended validity', 'VIP priority support', 'International verification'] }
+        { title: '1 Year', desc: 'Perfect for short trips.', features: ['Digital + Physical Document', 'Valid in 160+ countries', '24/7 Support', 'Courier delivery included', 'Translated into 9 languages'] },
+        { title: '2 Years', desc: 'Our users\' favorite choice.', features: ['Everything in 1 year plan', 'Priority shipping', 'Renewal discount', 'Basic legal advice', 'QR verification code'] },
+        { title: '5 Years', desc: 'Long-term peace of mind.', features: ['Everything in 2 year plan', 'Free replacement', 'Extended validity', 'VIP priority support', 'International verification'] }
       ]
     },
     requirements: {
@@ -296,7 +298,7 @@ export const translations = {
         { name: 'Maria G.', country: 'Argentina', rating: 5, text: 'Very professional. They helped me with the documentation and the process was super fast.' },
         { name: 'John D.', country: 'USA', rating: 5, text: 'Smooth process. Got my digital permit in 24 hours. Physical copy arrived 3 days later.' },
         { name: 'Laura P.', country: 'Spain', rating: 5, text: 'Used it on my Europe trip and it worked perfectly in every country.' },
-        { name: 'Pedro R.', country: 'Colombia', rating: 5, text: 'Best price I found. Personalized attention and everything very clear.' },
+        { name: 'Pedro R.', country: 'Colombia', rating: 5, text: 'Excellent service and personalized attention. Everything very clear.' },
         { name: 'Ana L.', country: 'Chile', rating: 5, text: 'Thought it would be complicated but it was super easy. 3 steps and done.' },
       ]
     },

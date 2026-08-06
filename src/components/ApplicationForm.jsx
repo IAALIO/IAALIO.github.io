@@ -117,9 +117,9 @@ const ApplicationForm = () => {
                       </div>
                       <input type="text" name="paisResidencia" value={formData.paisResidencia} onChange={handleChange} placeholder={t.form.step1.paisResPlaceholder} className="w-full px-4 py-3 rounded-lg border border-primary-light focus:border-accent focus:ring-2 focus:ring-accent/10 outline-none transition-all text-sm" required />
                       <select name="vigencia" value={formData.vigencia} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-primary-light focus:border-accent focus:ring-2 focus:ring-accent/10 outline-none transition-all text-sm">
-                        <option value="1 year">1 Año - $70 USD</option>
-                        <option value="2 years">2 Años - $100 USD</option>
-                        <option value="5 years">5 Años - $150 USD</option>
+                        <option value="1 year">1 Año</option>
+                        <option value="2 years">2 Años</option>
+                        <option value="5 years">5 Años</option>
                       </select>
                     </div>
                   </motion.div>

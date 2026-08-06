@@ -32,7 +32,7 @@ const TermsModal = ({ isOpen, onClose }) => {
         <div><span className="font-bold text-primary">17. PRIVACIDAD Y DATOS PERSONALES.</span> IAA recopila: nombre, ID, fecha de nacimiento, nacionalidad, estatura, tipo de sangre, color de ojos, foto de rostro, foto de licencia, foto de firma, foto de cédula, email y teléfono. Almacenados en Google Workspace con acceso restringido.</div>
         <div><span className="font-bold text-primary">18. COMPARTIR DATOS CON TERCEROS.</span> IAA no vende ni comparte datos personales con terceros excepto: empresas de envío postal (dirección física) y cuando sea requerido por ley.</div>
         <div><span className="font-bold text-primary">19. RETENCIÓN DE DATOS.</span> Los datos se conservan mientras el usuario tenga una relación comercial con IAA, más el tiempo requerido por obligaciones fiscales y legales (mínimo 5 años).</div>
-        <div><span className="font-bold text-primary">20. ELIMINACIÓN DE DATOS.</span> El usuario puede solicitar la eliminación de sus datos escribiendo a license.international.official@gmail.com. IAA los eliminará en 30 días, salvo que la ley exija retención.</div>
+        <div><span className="font-bold text-primary">20. ELIMINACIÓN DE DATOS.</span> El usuario puede solicitar la eliminación de sus datos a través del formulario de solicitud del sitio web. IAA los eliminará en 30 días, salvo que la ley exija retención.</div>
         <div><span className="font-bold text-primary">21. POLÍTICA DE REEMBOLSOS.</span> No hay reembolso una vez que la tarjeta ha sido diseñada y puesta en producción, por ser producto personalizado. Excepción: si IAA no puede producirla, se reembolsa el total.</div>
         <div><span className="font-bold text-primary">22. REEMPLAZOS.</span> Si la tarjeta llega dañada por defecto de fábrica, IAA la reemplaza sin costo. Si se pierde o daña por uso del usuario, hay cargo por reposición.</div>
         <div><span className="font-bold text-primary">23. ENVÍO Y ENTREGA.</span> IAA no garantiza tiempos de entrega exactos. No es responsable por demoras postales, pérdidas en aduana, ni direcciones incorrectas proporcionadas por el usuario.</div>
@@ -61,7 +61,7 @@ const TermsModal = ({ isOpen, onClose }) => {
         <div><span className="font-bold text-primary">46. NO ENDOSO GUBERNAMENTAL.</span> El diseño de la tarjeta no implica endoso de ningún gobierno, consulado ni entidad oficial.</div>
         <div><span className="font-bold text-primary">47. USO MILITAR.</span> La tarjeta no está diseñada para uso militar, gubernamental oficial ni fuerzas armadas.</div>
         <div><span className="font-bold text-primary">48. TRADUCCIÓN INFORMATIVA.</span> Las traducciones en la tarjeta son de carácter informativo. El texto original en español prevalece.</div>
-        <div><span className="font-bold text-primary">49. CONTACTO.</span> Toda comunicación a: license.international.official@gmail.com. Notificaciones se consideran recibidas 24 horas después del envío.</div>
+        <div><span className="font-bold text-primary">49. CONTACTO.</span> Toda comunicación se realizará a través del formulario de solicitud del sitio web. Notificaciones se consideran recibidas 24 horas después del envío.</div>
         <div><span className="font-bold text-primary">50. VIGENCIA.</span> Estos términos entran en vigencia al aceptarlos y permanecen hasta ser reemplazados.</div>
       </div>
     </>
@@ -90,7 +90,7 @@ const TermsModal = ({ isOpen, onClose }) => {
         <div><span className="font-bold text-primary">17. PRIVACY AND DATA.</span> IAA collects: name, ID, date of birth, nationality, height, blood type, eye color, face photo, license photo, signature photo, ID photo, email and phone. Stored in Google Workspace with restricted access.</div>
         <div><span className="font-bold text-primary">18. DATA SHARING.</span> IAA does not sell or share personal data except with shipping companies and as required by law.</div>
         <div><span className="font-bold text-primary">19. DATA RETENTION.</span> Data is kept during the business relationship plus the time required by law (minimum 5 years).</div>
-        <div><span className="font-bold text-primary">20. DATA DELETION.</span> Users may request deletion at license.international.official@gmail.com. IAA will delete within 30 days unless required by law.</div>
+        <div><span className="font-bold text-primary">20. DATA DELETION.</span> Users may request deletion via the website application form. IAA will delete within 30 days unless required by law.</div>
         <div><span className="font-bold text-primary">21. REFUND POLICY.</span> No refund once the card is in production. Exception: if IAA cannot produce it, a full refund is issued.</div>
         <div><span className="font-bold text-primary">22. REPLACEMENTS.</span> If the card arrives damaged from manufacturing, IAA replaces it free of charge. Lost or user-damaged cards incur a replacement fee.</div>
         <div><span className="font-bold text-primary">23. SHIPPING.</span> IAA does not guarantee exact delivery times and is not responsible for postal delays or customs issues.</div>
@@ -119,7 +119,7 @@ const TermsModal = ({ isOpen, onClose }) => {
         <div><span className="font-bold text-primary">46. NO GOVERNMENT ENDORSEMENT.</span> The card design does not imply endorsement by any government entity.</div>
         <div><span className="font-bold text-primary">47. MILITARY USE.</span> The card is not designed for military or official government use.</div>
         <div><span className="font-bold text-primary">48. INFORMATIONAL TRANSLATION.</span> Translations on the card are for informational purposes. The original Spanish text prevails.</div>
-        <div><span className="font-bold text-primary">49. CONTACT.</span> All communications to: license.international.official@gmail.com.</div>
+        <div><span className="font-bold text-primary">49. CONTACT.</span> All communications will be handled via the website application form.</div>
         <div><span className="font-bold text-primary">50. EFFECTIVENESS.</span> These terms take effect upon acceptance and remain until replaced.</div>
       </div>
     </>
