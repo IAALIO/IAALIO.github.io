@@ -31,18 +31,12 @@ const SearchLicense = () => {
   const [status, setStatus] = useState('idle')
   const [result, setResult] = useState(null)
 
-  const fetchLicenciasJSONP = () => {
-    return new Promise((resolve, reject) => {
-      const apiUrl = FORM_API
-      if (!apiUrl) return reject(new Error('no api'))
-      const cb = 'jcb_' + Date.now()
-      const s = document.createElement('script')
-      s.src = apiUrl + '?action=licencias&callback=' + cb + '&_=' + Date.now()
-      window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
-      s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
-      document.body.appendChild(s)
-      setTimeout(() => { if (window[cb]) { delete window[cb]; document.body.removeChild(s); reject(new Error('timeout')) } }, 8000)
-    })
+  const fetchLicencias = async () => {
+    const apiUrl = FORM_API
+    if (!apiUrl) throw new Error('no api')
+    const res = await fetch(apiUrl + '?action=licencias', { cache: 'no-store' })
+    if (!res.ok) throw new Error('http ' + res.status)
+    return await res.json()
   }
 
   const handleSearch = async (e) => {
@@ -52,10 +46,10 @@ const SearchLicense = () => {
     try {
       let result
       try {
-        result = await fetchLicenciasJSONP()
+        result = await fetchLicencias()
       } catch {
         try {
-          result = await fetchLicenciasJSONP()
+          result = await fetchLicencias()
         } catch {
           setStatus('error')
           return

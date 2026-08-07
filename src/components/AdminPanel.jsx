@@ -25,17 +25,11 @@ const AdminPanel = () => {
   const [addForm, setAddForm] = useState({ docId: '', nombre: '', vencimiento: '', categoria: '', link: '', tramite: '', nacimiento: '', nacionalidad: '', estatura: '', sangre: '', ojos: '', foto: '', pais: '', firma: '', cedula: '' })
   const [addSuccess, setAddSuccess] = useState(false)
 
-  const fetchLicenciasJSONP = () => {
-    return new Promise((resolve, reject) => {
-      if (!FORM_API) return reject(new Error('no api'))
-      const cb = 'ajcb_' + Date.now()
-      const s = document.createElement('script')
-      s.src = FORM_API + '?action=licencias&callback=' + cb + '&_=' + Date.now()
-      window[cb] = (data) => { delete window[cb]; document.body.removeChild(s); resolve(data) }
-      s.onerror = () => { delete window[cb]; document.body.removeChild(s); reject(new Error('jsonp')) }
-      document.body.appendChild(s)
-      setTimeout(() => { if (window[cb]) { delete window[cb]; document.body.removeChild(s); reject(new Error('timeout')) } }, 8000)
-    })
+  const fetchLicencias = async () => {
+    if (!FORM_API) throw new Error('no api')
+    const res = await fetch(FORM_API + '?action=licencias', { cache: 'no-store' })
+    if (!res.ok) throw new Error('http ' + res.status)
+    return await res.json()
   }
 
   useEffect(() => {
@@ -48,10 +42,10 @@ const AdminPanel = () => {
     try {
       let result
       try {
-        result = await fetchLicenciasJSONP()
+        result = await fetchLicencias()
       } catch {
         try {
-          result = await fetchLicenciasJSONP()
+          result = await fetchLicencias()
         } catch {
           setLicenses([])
           setLoadError(true)
