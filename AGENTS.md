@@ -44,7 +44,7 @@ lio-new/
 │   │   ├── folleto-traduccion.png
 │   │   └── package-completo.png
 │   ├── components/
-│   │   ├── Navbar.jsx                  # Logo IAA + navegación + iconos WhatsApp/Email
+│   │   ├── Navbar.jsx                  # Logo IAA + navegación + toggle idioma
 │   │   ├── Hero.jsx                    # Hero con logos IAA/UN/FIA
 │   │   ├── Footer.jsx                  # Footer con disclaimer translucent text
 │   │   ├── UrgencyBar.jsx              # Badge "IAA · ONU · FIA"
@@ -147,13 +147,11 @@ lio-new/
 - Declara: "La tarjeta IAA es un producto de traducción... no es un documento gubernamental... no reemplaza la licencia nacional"
 - `select-none` para que no se seleccione accidentalmente
 
-## Navbar — Contactos
-- Iconos WhatsApp (`MessageCircle`) y Email (`Mail`) en la navbar desktop, al lado del toggle de idioma
-- Color `text-white/40`, hover `text-white`
-- En móvil, aparecen en el menú hamburguesa antes del CTA
-- WhatsApp: `wa.me/584244296940`
-- Email: `license.international.official@gmail.com`
-- El WhatsAppButton flotante fue eliminado
+## Navbar — Contactos (REMOVIDOS 2026-08-06)
+- Los iconos de WhatsApp y Email fueron **eliminados** de la navbar (desktop y móvil)
+- WhatsApp: `wa.me/584244296940` — **ya no aparece en el sitio**
+- Email: `license.international.official@gmail.com` — **ya no aparece en el sitio**
+- El contacto es ahora solo vía el formulario de solicitud del sitio web
 
 ## Mobile Responsive
 - **Testimonios:** Scroll horizontal con `snap-x snap-mandatory`, cada card `min-w-[85vw]` (uno por vez)
@@ -210,6 +208,61 @@ lio-new/
       Solución: migrar de CSV a AppsScript + JSONP.
       `AppsScript.gs`: `doGet(?action=licencias&callback=fn)` sirve JSONP.
       `SearchLicense.jsx` y `AdminPanel.jsx`: usan `jsonp()` en vez de `fetch(CSV)`.
+
+## Bitácora 2026-08-06 (sesión actual)
+### Cambios de código (commit `b8e679f`, pusheado a main)
+- **Panel de búsqueda/verificación arreglado:**
+  - `SearchLicense.jsx` y `AdminPanel.jsx`: cache-buster `&_=Date.now()` en el JSONP para evitar que el navegador cachee la respuesta (causaba mostrar solo 4 registros viejos)
+  - **Eliminado el fallback a `public/data/licencias.json`** (dato estático viejo con solo 4 licencias — ya no se usa)
+  - Se añadió reintento (1 vez) y estado de error con botón "Reintentar" en ambos componentes
+- **Contactos personales removidos del sitio** (privacidad):
+  - `Navbar.jsx`: eliminados iconos WhatsApp (`wa.me/584244296940`) y Email (`mailto:license.international.official@gmail.com`)
+  - `Footer.jsx`: eliminados email + teléfono `+58 4244296940`
+  - `TermsModal.jsx`: cláusulas 20 y 49 (ES/EN) ahora dicen "a través del formulario de solicitud del sitio web"
+- **Precios removidos → "Consultar Precio"**:
+  - `translations.js`: eliminado `price`, agregada clave `consultPrice` (ES/EN), testimonio con precio ajustado
+  - `Pricing.jsx`: muestra "Consultar Precio" con link a `#tramite`
+  - `UrgencyBar.jsx`: CTA sticky sin precios
+  - `ApplicationForm.jsx`: opciones de vigencia sin $70/$100/$150
+- Build local verificado OK (Node via `node_modules/vite/bin/vite.js build`; instalado `@rolldown/binding-win32-x64-msvc --no-save` porque node_modules venía de Linux)
+
+### Git (instalado el 06-08)
+- Git 2.55.0.3 instalado vía winget → `C:\Program Files\Git\cmd\git.exe` (NO está en PATH)
+- `npm.ps1` bloqueado por ExecutionPolicy → usar `npm.cmd` o node directo
+
+### Workflow / Deploy (commits `fedc985`, `2718e6d`, `15bac29`)
+- Agregado `workflow_dispatch:` bajo `on:` en `.github/workflows/deploy.yml` (permite disparo manual)
+- Token nuevo (classic PAT, scopes repo+workflow, owner `licenseinternationalofficial`) puesto en la URL del remote; el fine-grained anterior daba 403 al push
+- Runs intentados: #59 (cancelado) y #60 (quedó en cola)
+
+### Incidente global de GitHub (NO es problema del proyecto)
+- **2026-08-06: Major Outage en GitHub Actions y Pages** (15:22 UTC→~22:18+ UTC, recuperación en curso)
+- Causa de: pushes que no disparaban el workflow (webhooks throttled ~15%) y runs "queued" por horas
+- Última actualización: 97% de éxito, runners drenando cola. Nada que hacer, esperar.
+- Cuando se recupere, verificar el run #60 o re-despachar manualmente
+
+### Limpieza de archivos muertos (mismo día)
+- **Borrado `public/data/licencias.json`** (archivo muerto con datos personales reales de clientes — ya no se usa, el panel usa AppsScript live)
+- **Borrado restos de Netlify** (verificado que GitHub Pages no los usa): `netlify.toml`, `public/_redirects`, `public/forms.html`, y la línea `VITE_API_URL=/.netlify/functions` en `.env` y `.env.example`
+
+### Pendiente tras la sesión
+- [x] Verificar deploy #64: **exitoso** — el sitio muestra "Consultar Precio"/"Check Price", sin contactos ni precios
+
+### Mejoras visuales + fixes admin (misma sesión, último commit)
+- **Hero — marquee infinito de banderas**: las 24 banderas rotan en loop continuo (`translateX(-50%)`, duplicadas), con máscara de desvanecido en los bordes, pausa al hover y `prefers-reduced-motion`. Los logos IAA/ONU/FIA quedan estáticos arriba. (CSS: `.marquee-track`, `.marquee-mask`)
+- **Anclas**: `section[id] { scroll-margin-top: 6rem }` para que la navbar fija no tape los destinos al navegar por hash (Inicio → formulario, etc.)
+- **Nav renombrado**: "Precios" → "Planes" (ES) / "Plans" (EN) en `translations.js`
+- **Efectos visuales**:
+  - Barra de progreso de scroll (roja, brillo) en la parte superior de la navbar (`Navbar.jsx`)
+  - Navbar glass al hacer scroll: `bg-primary/85 backdrop-blur-md` + borde inferior (`Navbar.jsx`)
+  - Botones `btn-primary` con degradado `#cf2e2e→#a31212`, shadow rojo y barrido de brillo al hover (CSS)
+  - `btn-outline` con degradado al hover; cards con glow rojo sutil al hover (CSS)
+  - CTAs principales migrados a `btn-primary`: Hero, Navbar (desktop+móvil), Pricing (popular), Testimonials, DocumentShowcase, FAQ, Requirements, StickyMobileCTA, botón "Siguiente" del formulario
+- **AdminPanel fixes**:
+  - Buscador: ahora es **substring + case-insensitive** y busca por **documento, ID trámite y nombre** (antes solo igualdad exacta, por eso "no encontraba")
+  - Modal de detalle: nuevo wrapper `overflow-y-auto` + `min-h-full` + `my-auto` para que **nunca se salga de pantalla** y haga scroll interno en pantallas pequeñas o contenido largo
+- Build verificado OK
+- **Deploy**: se disparará con este push (run nuevo, tras la recuperación del incidente)
 
 ## CSV DNS Issue (Resuelto)
 
