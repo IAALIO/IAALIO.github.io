@@ -1,6 +1,6 @@
 export const translations = {
   es: {
-    nav: { inicio: 'Inicio', precios: 'Precios', requisitos: 'Requisitos', verificar: 'Verificar', tramite: 'Iniciar Trámite', comoFunciona: 'Cómo Funciona', faq: 'FAQ' },
+    nav: { inicio: 'Inicio', precios: 'Planes', requisitos: 'Requisitos', verificar: 'Verificar', tramite: 'Iniciar Trámite', comoFunciona: 'Cómo Funciona', faq: 'FAQ' },
     hero: {
       badge: 'IAA · ONU · FIA',
       title: 'Tu Permiso Internacional',
@@ -172,7 +172,7 @@ export const translations = {
     }
   },
   en: {
-    nav: { inicio: 'Home', precios: 'Pricing', requisitos: 'Requirements', verificar: 'Verify', tramite: 'Apply Now', comoFunciona: 'How It Works', faq: 'FAQ' },
+    nav: { inicio: 'Home', precios: 'Plans', requisitos: 'Requirements', verificar: 'Verify', tramite: 'Apply Now', comoFunciona: 'How It Works', faq: 'FAQ' },
     hero: {
       badge: 'IAA · UN · FIA',
       title: 'Your International',

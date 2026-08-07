@@ -189,7 +189,7 @@ const ApplicationForm = () => {
                   </button>
                 ) : <div />}
                 {step < totalSteps ? (
-                  <button type="button" onClick={handleNext} className="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-accent text-white font-bold rounded-lg hover:bg-accent-dark transition-all text-sm shadow-sm">
+                  <button type="button" onClick={handleNext} className="btn-primary flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-bold shadow-sm">
                     {t.form.next} <ChevronRight size={18} />
                   </button>
                 ) : (

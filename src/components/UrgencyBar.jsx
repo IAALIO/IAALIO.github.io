@@ -18,7 +18,7 @@ const StickyMobileCTA = () => {
               <p className="text-[8px] text-text-muted leading-tight">{t.sticky.text}</p>
             </div>
           </div>
-          <a href="#tramite" className="flex items-center gap-1.5 bg-accent text-white font-bold px-5 py-2.5 rounded-lg text-xs hover:bg-accent-dark transition-all shadow-sm">
+          <a href="#tramite" className="btn-primary flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold shadow-sm">
             {t.sticky.cta} <ArrowRight size={14} />
           </a>
         </div>

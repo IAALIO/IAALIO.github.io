@@ -8,10 +8,16 @@ const Navbar = () => {
   const { t, toggleLang, lang } = useLang()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+      const h = document.documentElement
+      const max = h.scrollHeight - h.clientHeight
+      setProgress(max > 0 ? (h.scrollTop / max) * 100 : 0)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -24,7 +30,8 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-primary shadow-lg shadow-black/20 py-2' : 'bg-primary py-3'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-primary/85 backdrop-blur-md shadow-lg shadow-black/20 py-2 border-b border-white/10' : 'bg-primary py-3'}`}>
+      <div className="absolute top-0 left-0 h-0.5 bg-accent shadow-[0_0_8px_rgba(207,46,46,0.8)] transition-[width] duration-150" style={{ width: `${progress}%` }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <a href="#" className="flex items-center gap-3">
           <img src={iaaLogo} alt="IAA" className="h-10 w-auto" />
@@ -44,7 +51,7 @@ const Navbar = () => {
             <Globe size={14} />
             {lang === 'es' ? 'EN' : 'ES'}
           </button>
-          <a href="#tramite" className="font-semibold text-sm px-5 py-2.5 rounded-lg bg-accent text-white hover:bg-accent-dark transition-all shadow-sm">
+          <a href="#tramite" className="btn-primary font-semibold text-sm px-5 py-2.5">
             {t.nav.tramite}
           </a>
         </div>
@@ -74,7 +81,7 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
-              <a href="#tramite" className="bg-accent text-white font-semibold px-8 py-3 rounded-lg text-sm shadow-sm w-full text-center" onClick={() => setIsMobileMenuOpen(false)}>
+              <a href="#tramite" className="btn-primary font-semibold px-8 py-3 text-sm w-full text-center" onClick={() => setIsMobileMenuOpen(false)}>
                 {t.nav.tramite}
               </a>
             </div>

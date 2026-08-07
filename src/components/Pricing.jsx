@@ -50,7 +50,7 @@ const Pricing = () => {
                     ))}
                   </div>
                   <a href="#tramite" className={`block text-center py-3 rounded-lg font-semibold text-sm transition-all ${
-                    isPopular ? 'bg-accent text-white hover:bg-accent-dark shadow-sm' : 'border border-primary text-primary hover:bg-primary hover:text-white'
+                    isPopular ? 'btn-primary shadow-sm' : 'border border-primary text-primary hover:bg-primary hover:text-white'
                   }`}>
                     {t.pricing.select}
                   </a>

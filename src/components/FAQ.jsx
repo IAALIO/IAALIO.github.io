@@ -50,7 +50,7 @@ const FAQ = () => {
 
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-8">
           <p className="text-text-muted text-sm mb-4">{t.faq.subtitle}</p>
-          <a href="#tramite" className="inline-flex items-center gap-2 bg-accent text-white font-bold px-8 py-3.5 rounded-lg hover:bg-accent-dark transition-all shadow-lg shadow-accent/20 text-sm">
+          <a href="#tramite" className="btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm font-bold shadow-lg shadow-accent/20">
             {t.hero.cta}
           </a>
         </motion.div>

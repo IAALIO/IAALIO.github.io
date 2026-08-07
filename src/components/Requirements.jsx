@@ -65,7 +65,7 @@ const Requirements = () => {
                     <span className="text-sm font-medium text-white">{t.requirements.sidebar.feature2}</span>
                   </div>
                 </div>
-                <a href="#tramite" className="block w-full bg-accent text-white font-bold py-3 rounded-lg text-sm hover:bg-accent-dark transition-all shadow-sm">
+                <a href="#tramite" className="btn-primary block w-full py-3 text-sm font-bold text-center shadow-sm">
                   {t.requirements.cta}
                 </a>
               </div>
