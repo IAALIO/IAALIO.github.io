@@ -90,10 +90,11 @@ const AdminPanel = () => {
     else setError(t.admin.wrongPwd)
   }
 
-  const q = searchQuery.trim()
+  const q = searchQuery.trim().toLowerCase()
   const filtered = q ? licenses.filter(l =>
-    String(l.id) === q ||
-    String(l.id_tramite) === q
+    String(l.id || '').toLowerCase().includes(q) ||
+    String(l.id_tramite || '').toLowerCase().includes(q) ||
+    String(l.nombre || '').toLowerCase().includes(q)
   ) : licenses
 
   const stats = {
@@ -318,8 +319,9 @@ const AdminPanel = () => {
       </div>
 
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => setSelected(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40" onClick={() => setSelected(null)}>
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 my-auto" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelected(null)} className="absolute top-4 right-4 text-text-muted hover:text-primary transition-colors">
               <X size={20} />
             </button>
@@ -386,6 +388,7 @@ const AdminPanel = () => {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       )}
