@@ -56,7 +56,7 @@ const Hero = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-col sm:flex-row gap-4 mb-6">
-              <a href="#tramite" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-white font-bold rounded-lg hover:bg-accent-dark transition-all shadow-lg shadow-accent/25 hover:-translate-y-0.5 text-sm">
+              <a href="#tramite" className="btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold shadow-lg shadow-accent/25 hover:-translate-y-0.5">
                 {t.hero.cta} <ArrowRight size={20} />
               </a>
               <a href="#verificar" className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-all hover:-translate-y-0.5 text-sm">
@@ -115,13 +115,15 @@ const Hero = () => {
                   <p className="text-gray-400 text-[10px] text-center mb-3 uppercase tracking-wider font-semibold">
                     {lang === 'es' ? 'Latinoamérica y más de 160 países' : 'Latin America & 160+ countries'}
                   </p>
-                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                    {flags.map(f => (
-                      <div key={f.code} className="flex flex-col items-center gap-0.5">
-                        <img src={`https://flagcdn.com/24x18/${f.code}.png`} alt={f.name} className="rounded shadow-sm" loading="lazy" />
-                        <span className="text-gray-400 text-[7px] font-medium truncate w-full text-center">{f.name}</span>
-                      </div>
-                    ))}
+                  <div className="relative overflow-hidden marquee-mask">
+                    <div className="flex w-max marquee-track">
+                      {[...flags, ...flags].map((f, i) => (
+                        <div key={i} className="flex flex-col items-center gap-1 shrink-0 w-16 px-1">
+                          <img src={`https://flagcdn.com/24x18/${f.code}.png`} alt={f.name} className="rounded shadow-sm" loading="lazy" />
+                          <span className="text-gray-400 text-[7px] font-medium truncate w-full text-center">{f.name}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
